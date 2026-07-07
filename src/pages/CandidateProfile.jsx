@@ -1,10 +1,31 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
+import { getCandidateProfile, updateCandidateProfile } from '../api';
 
 function CandidateProfile() {
-  const [skills, setSkills] = useState(["React", "JavaScript", "HTML", "CSS", "C#", "SQL"]);
+  const [profile, setProfile] = useState({
+    fullName: '', phone: '', location: '', summary: '', skills: ''
+  });
+  const [skills, setSkills] = useState([]);
   const [newSkill, setNewSkill] = useState('');
   const [saved, setSaved] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const data = await getCandidateProfile();
+        if (data.id) {
+          setProfile(data);
+          setSkills(data.skills ? data.skills.split(', ') : []);
+        }
+      } catch (err) {
+        console.error('Error fetching profile:', err);
+      }
+      setLoading(false);
+    };
+    fetchProfile();
+  }, []);
 
   const handleAddSkill = () => {
     if (newSkill.trim() !== '' && !skills.includes(newSkill)) {
@@ -17,10 +38,29 @@ function CandidateProfile() {
     setSkills(skills.filter((s) => s !== skill));
   };
 
-  const handleSave = () => {
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
+  const handleSave = async () => {
+    try {
+      const data = await updateCandidateProfile({
+        ...profile,
+        skills: skills.join(', ')
+      });
+      if (data.id) {
+        setSaved(true);
+        setTimeout(() => setSaved(false), 3000);
+      }
+    } catch (err) {
+      alert('Failed to save profile!');
+    }
   };
+
+  if (loading) return (
+    <div className="flex min-h-screen bg-slate-50">
+      <Sidebar role="jobseeker" />
+      <div className="flex-1 p-8 flex items-center justify-center">
+        <p className="text-slate-400">⏳ Loading profile...</p>
+      </div>
+    </div>
+  );
 
   return (
     <div className="flex min-h-screen bg-slate-50">
@@ -39,31 +79,35 @@ function CandidateProfile() {
               👤
             </div>
             <div>
-              <h3 className="text-2xl font-bold text-slate-800">Nimasha</h3>
-              <p className="text-slate-500">Software Engineering Student</p>
-              <p className="text-slate-400 text-sm">Kandy, Sri Lanka</p>
+              <h3 className="text-2xl font-bold text-slate-800">{profile.fullName}</h3>
+              <p className="text-slate-500">{profile.email}</p>
+              <p className="text-slate-400 text-sm">{profile.location}</p>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-slate-600 mb-2 text-sm font-semibold">Full Name</label>
-              <input type="text" defaultValue="Nimasha"
-                className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition"/>
-            </div>
-            <div>
-              <label className="block text-slate-600 mb-2 text-sm font-semibold">Email</label>
-              <input type="email" defaultValue="nimasha@gmail.com"
+              <input type="text" value={profile.fullName}
+                onChange={(e) => setProfile({...profile, fullName: e.target.value})}
                 className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition"/>
             </div>
             <div>
               <label className="block text-slate-600 mb-2 text-sm font-semibold">Phone</label>
-              <input type="text" defaultValue="+94 77 123 4567"
+              <input type="text" value={profile.phone}
+                onChange={(e) => setProfile({...profile, phone: e.target.value})}
                 className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition"/>
             </div>
             <div>
               <label className="block text-slate-600 mb-2 text-sm font-semibold">Location</label>
-              <input type="text" defaultValue="Kandy, Sri Lanka"
+              <input type="text" value={profile.location}
+                onChange={(e) => setProfile({...profile, location: e.target.value})}
+                className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition"/>
+            </div>
+            <div>
+              <label className="block text-slate-600 mb-2 text-sm font-semibold">Summary</label>
+              <input type="text" value={profile.summary}
+                onChange={(e) => setProfile({...profile, summary: e.target.value})}
                 className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition"/>
             </div>
           </div>

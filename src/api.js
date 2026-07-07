@@ -53,3 +53,37 @@ export const postJob = async (jobData) => {
   });
   return response.json();
 };
+export const getCandidateProfile = async () => {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${API_URL}/api/candidates/profile`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }
+  });
+  return response.json();
+};
+
+export const updateCandidateProfile = async (profileData) => {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${API_URL}/api/candidates/profile`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(profileData)
+  });
+  return response.json();
+};
+
+export const getAllCandidates = async () => {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${API_URL}/api/candidates`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }
+  });
+  return response.json();
+};
