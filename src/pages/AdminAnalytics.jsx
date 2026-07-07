@@ -9,7 +9,7 @@ function AdminAnalytics() {
   ];
 
   const monthlyData = [
-    { month: "January", applications: 45, hired: 5 },
+    { month: "January", applications: 50, hired: 5 },
     { month: "February", applications: 62, hired: 8 },
     { month: "March", applications: 78, hired: 10 },
     { month: "April", applications: 55, hired: 6 },
