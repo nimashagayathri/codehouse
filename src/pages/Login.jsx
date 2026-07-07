@@ -49,7 +49,7 @@ function Login() {
             <span className="text-3xl">🎯</span>
           </div>
           <h1 className="text-4xl font-extrabold text-slate-800 tracking-tight">
-            Talent<span className="text-blue-700">IQ</span>
+            Code<span className="text-blue-700">House</span>
           </h1>
           <p className="text-slate-400 mt-2 text-sm">AI-Powered Recruitment Platform</p>
         </div>
@@ -92,7 +92,7 @@ function Login() {
             disabled={loading}
             className="w-full bg-blue-800 hover:bg-blue-900 text-white p-3 rounded-xl font-bold transition duration-300 shadow-md"
           >
-            {loading ? '⏳ Signing in...' : 'Sign In →'}
+            {loading ? '⏳ Signing in...' : 'Sign In '}
           </button>
 
           <div className="flex items-center gap-3 my-5">
