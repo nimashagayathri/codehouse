@@ -1,7 +1,21 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+
+// Backend role strings -> internal menu keys
+const ROLE_MAP = {
+  Candidate: 'jobseeker',
+  Recruiter: 'recruiter',
+  HiringManager: 'manager',
+  Admin: 'admin',
+};
 
 function Sidebar({ role }) {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Prefer the logged-in user's real role from localStorage.
+  // `role` prop (if passed) is only used as a fallback.
+  const storedRole = localStorage.getItem('role');
+  const resolvedRole = ROLE_MAP[storedRole] || role;
 
   const menus = {
     jobseeker: [
@@ -28,7 +42,14 @@ function Sidebar({ role }) {
     ],
   };
 
-  const currentMenu = menus[role] || [];
+  const currentMenu = menus[resolvedRole] || [];
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    localStorage.removeItem('name');
+    navigate('/login');
+  };
 
   return (
     <div className="w-64 min-h-screen bg-blue-900 text-white flex flex-col">
@@ -47,7 +68,7 @@ function Sidebar({ role }) {
             key={item.path}
             onClick={() => navigate(item.path)}
             className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition duration-200 ${
-              window.location.pathname === item.path
+              location.pathname === item.path
                 ? 'bg-blue-700 text-white font-semibold'
                 : 'text-blue-200 hover:bg-blue-800 hover:text-white'
             }`}
@@ -61,7 +82,7 @@ function Sidebar({ role }) {
       {/* Logout */}
       <div className="p-4 border-t border-blue-800">
         <button
-          onClick={() => navigate('/login')}
+          onClick={handleLogout}
           className="w-full flex items-center gap-3 p-3 rounded-xl text-blue-200 hover:bg-red-700 hover:text-white transition duration-200"
         >
           <span className="text-xl">🚪</span>

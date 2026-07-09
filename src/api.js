@@ -85,5 +85,15 @@ export const getAllCandidates = async () => {
       'Content-Type': 'application/json'
     }
   });
-  return response.json();
+  if (response.ok) {
+    return response.json();
+  }
+  // If candidates endpoint fails, try applications endpoint
+  const response2 = await fetch(`${API_URL}/api/applications`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }
+  });
+  return response2.json();
 };
