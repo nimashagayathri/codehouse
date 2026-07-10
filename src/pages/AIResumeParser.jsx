@@ -1,16 +1,64 @@
 import { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 
+const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
+
 function AIResumeParser() {
   const [parsed, setParsed] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [resumeText, setResumeText] = useState('');
+  const [aiResult, setAiResult] = useState(null);
 
-  const handleParse = () => {
+  const handleParse = async () => {
+    if (!resumeText.trim()) {
+      alert('Please paste your resume text first!');
+      return;
+    }
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent`,
+        {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'x-goog-api-key': GEMINI_API_KEY
+          },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{
+                text: `Analyze this resume and extract information. Return ONLY a JSON object with these fields:
+                {
+                  "name": "candidate name",
+                  "email": "email if found",
+                  "location": "location if found",
+                  "skills": ["skill1", "skill2"],
+                  "experience": "years of experience",
+                  "education": "highest education",
+                  "score": 85
+                }
+                
+                Resume text: ${resumeText}`
+              }]
+            }]
+          })
+        }
+      );
+      const data = await response.json();
+      const resultText = data.candidates[0].content.parts[0].text;
+      const jsonMatch = resultText.match(/\{[\s\S]*\}/);
+      const result = JSON.parse(jsonMatch[0]);
+      setAiResult(result);
       setParsed(true);
-    }, 2000);
+    } catch (err) {
+      console.error(err);
+      if (err.message?.includes('429') || err.toString().includes('429')) {
+        alert('Rate limit exceeded! Please wait 1 minute and try again. 😊');
+      } else {
+        alert('AI Analysis failed! Check your API key.');
+      }
+    }
+    setLoading(false);
   };
 
   return (
@@ -20,48 +68,46 @@ function AIResumeParser() {
       <div className="flex-1 p-8">
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-slate-800">AI Resume Parser 🤖</h2>
-          <p className="text-slate-400 mt-1">Upload your CV and let AI analyze it for you.</p>
+          <p className="text-slate-400 mt-1">Paste your resume and let Gemini AI analyze it!</p>
         </div>
 
-        {/* Upload Section */}
         <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 mb-6 max-w-2xl mx-auto">
-          <h3 className="text-lg font-bold text-slate-800 mb-4">Upload Your CV</h3>
-          <div className="border-2 border-dashed border-slate-300 p-8 rounded-2xl text-center mb-4">
-            <p className="text-4xl mb-2">📄</p>
-            <p className="text-slate-400 mb-4">Upload your CV and AI will analyze it!</p>
-            <input type="file" className="hidden" id="resume-upload" />
-            <label htmlFor="resume-upload"
-              className="bg-blue-700 text-white px-6 py-2 rounded-xl cursor-pointer hover:bg-blue-800 font-semibold">
-              Choose File
-            </label>
-          </div>
+          <h3 className="text-lg font-bold text-slate-800 mb-4">Paste Your Resume Text</h3>
+          <textarea
+            rows="8"
+            placeholder="Paste your resume text here..."
+            value={resumeText}
+            onChange={(e) => setResumeText(e.target.value)}
+            className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition mb-4"
+          />
           <button
             onClick={handleParse}
             disabled={loading}
             className="w-full bg-purple-600 text-white p-3 rounded-xl font-bold hover:bg-purple-700 transition duration-300"
           >
-            {loading ? '⏳ Analyzing...' : '🤖 Analyze with AI'}
+            {loading ? '⏳ Analyzing with Gemini AI...' : '🤖 Analyze with Gemini AI'}
           </button>
         </div>
 
-        {/* AI Results */}
-        {parsed && (
-          <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 mb-6 max-w-2xl mx-auto">
+        {parsed && aiResult && (
+          <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 max-w-2xl mx-auto">
             <h3 className="text-lg font-bold text-slate-800 mb-6">AI Analysis Results ✨</h3>
 
             <div className="mb-6">
               <h4 className="font-bold text-slate-600 mb-2">👤 Personal Info</h4>
               <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                <p className="text-slate-700"><span className="font-semibold">Name:</span> Nimasha</p>
-                <p className="text-slate-700"><span className="font-semibold">Email:</span> nimasha@gmail.com</p>
-                <p className="text-slate-700"><span className="font-semibold">Location:</span> Kandy, Sri Lanka</p>
+                <p className="text-slate-700"><span className="font-semibold">Name:</span> {aiResult.name}</p>
+                <p className="text-slate-700"><span className="font-semibold">Email:</span> {aiResult.email}</p>
+                <p className="text-slate-700"><span className="font-semibold">Location:</span> {aiResult.location}</p>
+                <p className="text-slate-700"><span className="font-semibold">Experience:</span> {aiResult.experience}</p>
+                <p className="text-slate-700"><span className="font-semibold">Education:</span> {aiResult.education}</p>
               </div>
             </div>
 
             <div className="mb-6">
               <h4 className="font-bold text-slate-600 mb-2">🛠️ Extracted Skills</h4>
               <div className="flex flex-wrap gap-2">
-                {["React", "JavaScript", "HTML", "CSS", "C#", "SQL", "ASP.NET"].map((skill) => (
+                {aiResult.skills?.map((skill) => (
                   <span key={skill} className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-semibold text-sm">
                     {skill}
                   </span>
@@ -69,18 +115,14 @@ function AIResumeParser() {
               </div>
             </div>
 
-            <div className="mb-6">
-              <h4 className="font-bold text-slate-600 mb-2">💼 Experience</h4>
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                <p className="font-semibold text-slate-800">Software Engineering Student</p>
-                <p className="text-slate-500">NSBM Green University • 2023 - Present</p>
-              </div>
-            </div>
-
             <div className="bg-purple-50 border border-purple-100 p-6 rounded-2xl text-center">
               <p className="text-slate-500 mb-1 font-medium">AI Profile Score</p>
-              <p className="text-5xl font-extrabold text-purple-600">87%</p>
-              <p className="text-slate-400 mt-2 text-sm">Strong profile! Ready to apply for jobs.</p>
+              <p className="text-5xl font-extrabold text-purple-600">{aiResult.score}%</p>
+              <p className="text-slate-400 mt-2 text-sm">
+                {aiResult.score >= 80 ? '🌟 Strong profile! Ready to apply.' :
+                 aiResult.score >= 60 ? '👍 Good profile! Some improvements needed.' :
+                 '💪 Keep improving your profile!'}
+              </p>
             </div>
           </div>
         )}

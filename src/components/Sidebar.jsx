@@ -1,21 +1,9 @@
-import { useNavigate, useLocation } from 'react-router-dom';
-
-// Backend role strings -> internal menu keys
-const ROLE_MAP = {
-  Candidate: 'jobseeker',
-  Recruiter: 'recruiter',
-  HiringManager: 'manager',
-  Admin: 'admin',
-};
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Sidebar({ role }) {
   const navigate = useNavigate();
-  const location = useLocation();
-
-  // Prefer the logged-in user's real role from localStorage.
-  // `role` prop (if passed) is only used as a fallback.
-  const storedRole = localStorage.getItem('role');
-  const resolvedRole = ROLE_MAP[storedRole] || role;
+  const [isOpen, setIsOpen] = useState(false);
 
   const menus = {
     jobseeker: [
@@ -42,54 +30,104 @@ function Sidebar({ role }) {
     ],
   };
 
-  const currentMenu = menus[resolvedRole] || [];
+  const currentMenu = menus[role] || [];
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
-    localStorage.removeItem('name');
-    navigate('/login');
+  const handleNavigation = (path) => {
+    navigate(path);
+    setIsOpen(false); // Close menu after navigation on mobile
   };
 
   return (
-    <div className="w-64 min-h-screen bg-blue-900 text-white flex flex-col">
-      {/* Logo */}
-      <div className="p-6 border-b border-blue-800">
-        <h1 className="text-2xl font-extrabold">
-          Code<span className="text-blue-300">House</span>
-        </h1>
-        <p className="text-blue-400 text-xs mt-1">AI Recruitment Platform</p>
-      </div>
-
-      {/* Menu */}
-      <nav className="flex-1 p-4 space-y-1">
-        {currentMenu.map((item) => (
-          <button
-            key={item.path}
-            onClick={() => navigate(item.path)}
-            className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition duration-200 ${
-              location.pathname === item.path
-                ? 'bg-blue-700 text-white font-semibold'
-                : 'text-blue-200 hover:bg-blue-800 hover:text-white'
-            }`}
-          >
-            <span className="text-xl">{item.icon}</span>
-            <span>{item.label}</span>
-          </button>
-        ))}
-      </nav>
-
-      {/* Logout */}
-      <div className="p-4 border-t border-blue-800">
+    <>
+      {/* Mobile Hamburger Menu */}
+      <div className="md:hidden fixed top-0 left-0 right-0 bg-blue-900 text-white p-4 flex justify-between items-center z-50">
+        <div>
+          <h1 className="text-lg font-extrabold">
+            Code<span className="text-blue-300">House</span>
+          </h1>
+        </div>
         <button
-          onClick={handleLogout}
-          className="w-full flex items-center gap-3 p-3 rounded-xl text-blue-200 hover:bg-red-700 hover:text-white transition duration-200"
+          onClick={() => setIsOpen(!isOpen)}
+          className="text-white text-2xl focus:outline-none"
         >
-          <span className="text-xl">🚪</span>
-          <span>Logout</span>
+          ☰
         </button>
       </div>
-    </div>
+
+      {/* Desktop Sidebar (Hidden on Mobile) */}
+      <div className="hidden md:flex md:w-64 md:min-h-screen bg-blue-900 text-white flex-col fixed md:relative">
+        {/* Logo */}
+        <div className="p-6 border-b border-blue-800">
+          <h1 className="text-2xl font-extrabold">
+            Code<span className="text-blue-300">House</span>
+          </h1>
+          <p className="text-blue-400 text-xs mt-1">AI Recruitment Platform</p>
+        </div>
+
+        {/* Desktop Menu */}
+        <nav className="flex-1 p-4 space-y-1">
+          {currentMenu.map((item) => (
+            <button
+              key={item.path}
+              onClick={() => handleNavigation(item.path)}
+              className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition duration-200 ${
+                window.location.pathname === item.path
+                  ? 'bg-blue-700'
+                  : 'hover:bg-blue-800'
+              }`}
+            >
+              <span className="text-xl">{item.icon}</span>
+              <span className="font-medium">{item.label}</span>
+            </button>
+          ))}
+        </nav>
+
+        {/* Logout */}
+        <div className="p-4 border-t border-blue-800">
+          <button className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-blue-800 transition duration-200">
+            <span className="text-xl">🚪</span>
+            <span className="font-medium">Logout</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Sidebar (Visible on Mobile) */}
+      {isOpen && (
+        <div className="md:hidden fixed top-16 left-0 right-0 bg-blue-900 text-white z-40 shadow-lg">
+          <nav className="p-4 space-y-1">
+            {currentMenu.map((item) => (
+              <button
+                key={item.path}
+                onClick={() => handleNavigation(item.path)}
+                className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition duration-200 ${
+                  window.location.pathname === item.path
+                    ? 'bg-blue-700'
+                    : 'hover:bg-blue-800'
+                }`}
+              >
+                <span className="text-xl">{item.icon}</span>
+                <span className="font-medium">{item.label}</span>
+              </button>
+            ))}
+          </nav>
+          {/* Logout in mobile menu */}
+          <div className="p-4 border-t border-blue-800">
+            <button className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-blue-800 transition duration-200">
+              <span className="text-xl">🚪</span>
+              <span className="font-medium">Logout</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Overlay when menu is open (mobile only) */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+    </>
   );
 }
 
