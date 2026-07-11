@@ -1,7 +1,7 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 
-const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
+const GROQ_API_KEY = process.env.REACT_APP_GROQ_API_KEY;
 
 function AIResumeParser() {
   const [parsed, setParsed] = useState(false);
@@ -14,49 +14,55 @@ function AIResumeParser() {
       alert('Please paste your resume text first!');
       return;
     }
+    if (!GROQ_API_KEY) {
+      alert('Groq API key is missing! Add REACT_APP_GROQ_API_KEY to your .env file.');
+      return;
+    }
     setLoading(true);
     try {
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent`,
+        'https://api.groq.com/openai/v1/chat/completions',
         {
           method: 'POST',
-          headers: { 
+          headers: {
             'Content-Type': 'application/json',
-            'x-goog-api-key': GEMINI_API_KEY
+            'Authorization': 'Bearer ' + GROQ_API_KEY
           },
           body: JSON.stringify({
-            contents: [{
-              parts: [{
-                text: `Analyze this resume and extract information. Return ONLY a JSON object with these fields:
-                {
-                  "name": "candidate name",
-                  "email": "email if found",
-                  "location": "location if found",
-                  "skills": ["skill1", "skill2"],
-                  "experience": "years of experience",
-                  "education": "highest education",
-                  "score": 85
-                }
-                
-                Resume text: ${resumeText}`
-              }]
-            }]
+            model: 'llama-3.3-70b-versatile',
+            messages: [{
+              role: 'user',
+              content: `Analyze this resume and extract information. Return ONLY a JSON object with these fields:
+              {
+                "name": "candidate name",
+                "email": "email if found",
+                "location": "location if found",
+                "skills": ["skill1", "skill2"],
+                "experience": "years of experience",
+                "education": "highest education",
+                "score": 85
+              }
+              
+              Resume text: ${resumeText}`
+            }],
+            temperature: 0.3
           })
         }
       );
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(`API Error ${response.status}: ${errData?.error?.message || JSON.stringify(errData)}`);
+      }
       const data = await response.json();
-      const resultText = data.candidates[0].content.parts[0].text;
+      const resultText = data.choices[0].message.content;
       const jsonMatch = resultText.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) throw new Error('Could not parse AI response as JSON');
       const result = JSON.parse(jsonMatch[0]);
       setAiResult(result);
       setParsed(true);
     } catch (err) {
       console.error(err);
-      if (err.message?.includes('429') || err.toString().includes('429')) {
-        alert('Rate limit exceeded! Please wait 1 minute and try again. 😊');
-      } else {
-        alert('AI Analysis failed! Check your API key.');
-      }
+      alert('AI Analysis failed: ' + err.message);
     }
     setLoading(false);
   };
@@ -85,16 +91,16 @@ function AIResumeParser() {
             disabled={loading}
             className="w-full bg-purple-600 text-white p-3 rounded-xl font-bold hover:bg-purple-700 transition duration-300"
           >
-            {loading ? '⏳ Analyzing with Gemini AI...' : '🤖 Analyze with Gemini AI'}
+            {loading ? '⏳ Analyzing with Groq AI...' : '🤖 Analyze with Groq AI'}
           </button>
         </div>
 
         {parsed && aiResult && (
           <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 max-w-2xl mx-auto">
-            <h3 className="text-lg font-bold text-slate-800 mb-6">AI Analysis Results ✨</h3>
+            <h3 className="text-lg font-bold text-slate-800 mb-6">AI Analysis Results âœ¨</h3>
 
             <div className="mb-6">
-              <h4 className="font-bold text-slate-600 mb-2">👤 Personal Info</h4>
+              <h4 className="font-bold text-slate-600 mb-2">ðŸ‘¤ Personal Info</h4>
               <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
                 <p className="text-slate-700"><span className="font-semibold">Name:</span> {aiResult.name}</p>
                 <p className="text-slate-700"><span className="font-semibold">Email:</span> {aiResult.email}</p>
@@ -105,7 +111,7 @@ function AIResumeParser() {
             </div>
 
             <div className="mb-6">
-              <h4 className="font-bold text-slate-600 mb-2">🛠️ Extracted Skills</h4>
+              <h4 className="font-bold text-slate-600 mb-2">ðŸ› ï¸ Extracted Skills</h4>
               <div className="flex flex-wrap gap-2">
                 {aiResult.skills?.map((skill) => (
                   <span key={skill} className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-semibold text-sm">
@@ -119,9 +125,9 @@ function AIResumeParser() {
               <p className="text-slate-500 mb-1 font-medium">AI Profile Score</p>
               <p className="text-5xl font-extrabold text-purple-600">{aiResult.score}%</p>
               <p className="text-slate-400 mt-2 text-sm">
-                {aiResult.score >= 80 ? '🌟 Strong profile! Ready to apply.' :
-                 aiResult.score >= 60 ? '👍 Good profile! Some improvements needed.' :
-                 '💪 Keep improving your profile!'}
+                {aiResult.score >= 80 ? 'ðŸŒŸ Strong profile! Ready to apply.' :
+                  aiResult.score >= 60 ? 'ðŸ‘ Good profile! Some improvements needed.' :
+                    'ðŸ’ª Keep improving your profile!'}
               </p>
             </div>
           </div>

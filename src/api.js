@@ -20,9 +20,9 @@ export const registerUser = async (data) => {
 export const getJobs = async () => {
   const token = localStorage.getItem('token');
   const response = await fetch(`${API_URL}/api/jobs`, {
-    headers: { 
+    headers: {
       'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json' 
+      'Content-Type': 'application/json'
     }
   });
   return response.json();
@@ -32,9 +32,9 @@ export const applyJob = async (jobId) => {
   const token = localStorage.getItem('token');
   const response = await fetch(`${API_URL}/api/applications/apply`, {
     method: 'POST',
-    headers: { 
+    headers: {
       'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json' 
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({ jobPostingId: jobId })
   });
@@ -45,9 +45,9 @@ export const postJob = async (jobData) => {
   const token = localStorage.getItem('token');
   const response = await fetch(`${API_URL}/api/jobs`, {
     method: 'POST',
-    headers: { 
+    headers: {
       'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json' 
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify(jobData)
   });
@@ -122,7 +122,7 @@ export const getMyInterviews = async () => {
 };
 export const evaluateCandidate = async (data) => {
   const token = localStorage.getItem('token');
-  const response = await fetch(`${API_URL}/api/evaluations`, {
+  let response = await fetch(`${API_URL}/api/evaluations`, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -130,5 +130,28 @@ export const evaluateCandidate = async (data) => {
     },
     body: JSON.stringify(data)
   });
+
+  // If evaluation already exists (409 Conflict), fetch it and do a PUT request
+  if (response.status === 409) {
+    const getRes = await fetch(`${API_URL}/api/evaluations/application/${data.jobApplicationId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    const existingEval = await getRes.json();
+
+    if (existingEval && existingEval.id) {
+      response = await fetch(`${API_URL}/api/evaluations/${existingEval.id}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+    }
+  }
+
   return response.json();
 };
