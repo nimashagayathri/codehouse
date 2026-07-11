@@ -8,6 +8,7 @@ function AdminUsers() {
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState('');
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchUsers();
   }, [roleFilter]);
@@ -38,10 +39,11 @@ function AdminUsers() {
     }
   };
 
-  const filteredUsers = users.filter((user) =>
-    user.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredUsers = users.filter((user) => {
+    const nameMatch = user?.fullName?.toLowerCase()?.includes(searchTerm.toLowerCase()) || false;
+    const emailMatch = user?.email?.toLowerCase()?.includes(searchTerm.toLowerCase()) || false;
+    return nameMatch || emailMatch;
+  });
 
   return (
     <div className="flex min-h-screen bg-slate-50">
@@ -92,27 +94,35 @@ function AdminUsers() {
                 </thead>
                 <tbody>
                   {filteredUsers.map((user) => (
-                    <tr key={user.id} className="border-b border-slate-50">
-                      <td className="py-3 text-slate-700 font-medium">{user.fullName}</td>
-                      <td className="text-slate-500">{user.email}</td>
-                      <td className="text-slate-500 font-medium">{user.role}</td>
+                    <tr key={user?.id || Math.random()} className="border-b border-slate-50 hover:bg-slate-50 transition">
+                      <td className="py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold">
+                            {user?.fullName ? user.fullName.charAt(0).toUpperCase() : 'U'}
+                          </div>
+                          <div>
+                            <p className="font-semibold text-slate-800">{user?.fullName || 'Unknown User'}</p>
+                            <p className="text-xs text-slate-400">ID: {String(user?.id || 'N/A').substring(0, 8)}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="text-slate-500 font-medium">{user?.email || 'No Email'}</td>
                       <td>
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${user.isActive
-                            ? "bg-green-100 text-green-700"
-                            : "bg-red-100 text-red-700"
-                          }`}>
-                          {user.isActive ? "Active" : "Disabled"}
+                        <span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-semibold">
+                          {user?.role || 'User'}
+                        </span>
+                      </td>
+                      <td>
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${user?.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                          {user?.isActive ? 'Active' : 'Disabled'}
                         </span>
                       </td>
                       <td>
                         <button
-                          onClick={() => toggleStatus(user.id, user.isActive)}
-                          className={`px-3 py-1 rounded-xl text-sm text-white font-semibold ${user.isActive
-                              ? "bg-red-500 hover:bg-red-600"
-                              : "bg-green-500 hover:bg-green-600"
-                            }`}
+                          onClick={() => toggleStatus(user?.id, user?.isActive)}
+                          className={`text-white px-4 py-1.5 rounded-lg text-sm font-semibold shadow-sm transition ${user?.isActive ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'}`}
                         >
-                          {user.isActive ? "Disable" : "Enable"}
+                          {user?.isActive ? 'Disable Access' : 'Enable Access'}
                         </button>
                       </td>
                     </tr>

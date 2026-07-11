@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   Home, FolderOpen, Calendar, Search, User, FileText,
   Sparkles, FileEdit, Users, Award,
-  BarChart3, Settings, Shield, LogOut, Menu
+  BarChart3, Shield, LogOut, Menu
 } from 'lucide-react';
 function Sidebar({ role }) {
   const navigate = useNavigate();
@@ -72,7 +72,7 @@ function Sidebar({ role }) {
       <div className="hidden md:flex md:w-64 md:min-h-screen bg-blue-900 text-white flex-col fixed md:relative">
         {/* Logo */}
         <div className="p-4 border-b border-blue-800 flex justify-center bg-white rounded-tr-3xl mb-4 h-24 items-center overflow-visible">
-          <img src="/logo.png" alt="CodeHouse" className="h-32 md:h-40 object-contain transform scale-[2]" />
+          <img src="/logo.png" alt="CodeHouse" className="h-32 md:h-40 object-contain transform scale-[2] pointer-events-none" />
         </div>
 
         {/* Desktop Menu */}

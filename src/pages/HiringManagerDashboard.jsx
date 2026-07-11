@@ -14,6 +14,7 @@ function HiringManagerDashboard() {
     { id: 3, name: "Dilani Fernando", position: "Frontend Developer", date: "2026-07-05", appId: 3 },
   ];
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const fetchDecisions = async () => {
       const token = localStorage.getItem('token');

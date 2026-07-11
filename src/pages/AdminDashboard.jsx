@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 
 const API_URL = 'http://localhost:5223';
@@ -7,6 +7,7 @@ function AdminDashboard() {
   const [users, setUsers] = useState([]);
   const token = localStorage.getItem('token');
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -101,20 +102,20 @@ function AdminDashboard() {
               </thead>
               <tbody>
                 {users.map(user => (
-                  <tr key={user.id} className="border-b border-slate-50">
-                    <td className="py-3 text-slate-700 font-medium">{user.fullName || '-'}</td>
-                    <td className="text-slate-500">{user.email}</td>
-                    <td className="text-slate-500">{user.role}</td>
+                  <tr key={user?.id || Math.random()} className="border-b border-slate-50">
+                    <td className="py-3 text-slate-700 font-medium">{user?.fullName || '-'}</td>
+                    <td className="text-slate-500">{user?.email || 'N/A'}</td>
+                    <td className="text-slate-500">{user?.role || 'N/A'}</td>
                     <td>
-                      <span className={"px-2 md:px-3 py-1 rounded-full text-xs font-semibold " + (user.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700')}>
-                        {user.isActive ? 'Active' : 'Disabled'}
+                      <span className={"px-2 md:px-3 py-1 rounded-full text-xs font-semibold " + (user?.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700')}>
+                        {user?.isActive ? 'Active' : 'Disabled'}
                       </span>
                     </td>
                     <td>
                       <button
-                        onClick={() => toggleUserStatus(user.id, user.isActive)}
-                        className={"text-white px-2 md:px-3 py-1 rounded-lg text-xs md:text-sm " + (user.isActive ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600')}>
-                        {user.isActive ? 'Disable' : 'Enable'}
+                        onClick={() => toggleUserStatus(user?.id, user?.isActive)}
+                        className={"text-white px-2 md:px-3 py-1 rounded-lg text-xs md:text-sm " + (user?.isActive ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600')}>
+                        {user?.isActive ? 'Disable' : 'Enable'}
                       </button>
                     </td>
                   </tr>
