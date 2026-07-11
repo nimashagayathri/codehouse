@@ -15,6 +15,7 @@ import AdminUsers from './pages/AdminUsers';
 import AdminAnalytics from './pages/AdminAnalytics';
 import Recommendations from './pages/Recommendations';
 import RankedCandidates from './pages/RankedCandidates';
+import MyApplications from './pages/MyApplications';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
         <Route path="/analytics" element={<AdminAnalytics />} />
         <Route path="/recommendations" element={<Recommendations />} />
         <Route path="/ai-ranking" element={<RankedCandidates />} />
+        <Route path="/my-applications" element={<MyApplications />} />
       </Routes>
     </BrowserRouter>
   );
