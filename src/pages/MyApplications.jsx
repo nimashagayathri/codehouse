@@ -29,7 +29,7 @@ function MyApplications() {
                 return <span className="bg-blue-100 text-blue-700 font-bold px-3 py-1 rounded-lg text-sm">Shortlisted &bull; Interview Pending</span>;
             case 'Hired':
             case 'Accepted':
-                return <span className="bg-green-100 text-green-700 font-bold px-3 py-1 rounded-lg text-sm">Offered / Hired 🎉</span>;
+                return <span className="bg-green-100 text-green-700 font-bold px-3 py-1 rounded-lg text-sm">Offered / Hired </span>;
             case 'Rejected':
                 return <span className="bg-red-100 text-red-700 font-bold px-3 py-1 rounded-lg text-sm">Not Selected</span>;
             default:
@@ -43,13 +43,13 @@ function MyApplications() {
 
             <div className="flex-1 p-8">
                 <div className="mb-8">
-                    <h2 className="text-2xl font-bold text-slate-800">My Applications 📂</h2>
+                    <h2 className="text-2xl font-bold text-slate-800">My Applications </h2>
                     <p className="text-slate-400 mt-1">Track the status of your submitted job applications.</p>
                 </div>
 
                 {loading ? (
                     <div className="flex justify-center items-center h-48">
-                        <p className="text-slate-500 font-medium">⏳ Loading applications...</p>
+                        <p className="text-slate-500 font-medium"> Loading applications...</p>
                     </div>
                 ) : applications.length === 0 ? (
                     <div className="bg-white p-12 rounded-2xl shadow-sm border border-slate-200 text-center">

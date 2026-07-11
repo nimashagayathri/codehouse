@@ -47,12 +47,14 @@ function Register() {
     <div className="min-h-screen bg-gradient-to-br from-blue-600 to-purple-700 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="bg-white p-8 rounded-2xl shadow-lg">
-          <h1 className="text-3xl font-extrabold text-center text-blue-700 mb-2">Code<span className="text-purple-600">House</span></h1>
+          <div className="h-16 flex items-center justify-center overflow-visible mb-2">
+            <img src="/logo.png" alt="CodeHouse" className="h-40 md:h-48 object-contain transform scale-[1.5]" />
+          </div>
           <p className="text-center text-gray-400 mb-6">Create Account</p>
 
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-600 p-3 rounded-xl mb-4 text-sm">
-              ⚠️ {error}
+              ️ {error}
             </div>
           )}
 
@@ -60,21 +62,21 @@ function Register() {
             <label className="block text-slate-600 mb-2 text-sm font-semibold">Full Name</label>
             <input type="text" name="fullName" value={form.fullName} onChange={handleChange}
               placeholder="Enter your full name"
-              className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500"/>
+              className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500" />
           </div>
 
           <div className="mb-4">
             <label className="block text-slate-600 mb-2 text-sm font-semibold">Email</label>
             <input type="email" name="email" value={form.email} onChange={handleChange}
               placeholder="Enter your email"
-              className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500"/>
+              className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500" />
           </div>
 
           <div className="mb-4">
             <label className="block text-slate-600 mb-2 text-sm font-semibold">Password</label>
             <input type="password" name="password" value={form.password} onChange={handleChange}
               placeholder="Min 6 characters"
-              className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500"/>
+              className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500" />
           </div>
 
           <div className="mb-6">
@@ -90,7 +92,7 @@ function Register() {
 
           <button onClick={handleRegister} disabled={loading}
             className="w-full bg-blue-700 hover:bg-blue-800 text-white p-3 rounded-xl font-bold transition duration-300">
-            {loading ? '⏳ Creating account...' : 'Register →'}
+            {loading ? ' Creating account...' : 'Register →'}
           </button>
 
           <p className="text-center text-gray-400 mt-4 text-sm">

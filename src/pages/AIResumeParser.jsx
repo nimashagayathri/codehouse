@@ -73,7 +73,7 @@ function AIResumeParser() {
 
       <div className="flex-1 p-8">
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-slate-800">AI Resume Parser 🤖</h2>
+          <h2 className="text-2xl font-bold text-slate-800">AI Resume Parser </h2>
           <p className="text-slate-400 mt-1">Paste your resume and let Gemini AI analyze it!</p>
         </div>
 
@@ -91,7 +91,7 @@ function AIResumeParser() {
             disabled={loading}
             className="w-full bg-purple-600 text-white p-3 rounded-xl font-bold hover:bg-purple-700 transition duration-300"
           >
-            {loading ? '⏳ Analyzing with Groq AI...' : '🤖 Analyze with Groq AI'}
+            {loading ? ' Analyzing with Groq AI...' : ' Analyze with Groq AI'}
           </button>
         </div>
 

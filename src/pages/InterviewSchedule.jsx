@@ -78,13 +78,13 @@ function InterviewSchedule() {
 
       <div className="flex-1 p-8">
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-slate-800">Interview Schedule 📅</h2>
+          <h2 className="text-2xl font-bold text-slate-800">Interview Schedule </h2>
           <p className="text-slate-400 mt-1">Schedule and manage candidate interviews.</p>
         </div>
 
         {added && (
           <div className="bg-green-50 border border-green-200 text-green-700 p-4 rounded-2xl mb-6 font-medium">
-            ✅ Interview Scheduled Successfully!
+             Interview Scheduled Successfully!
           </div>
         )}
 
@@ -138,7 +138,7 @@ function InterviewSchedule() {
           </div>
           <div className="p-6">
             {loading ? (
-              <p className="text-center text-slate-400">⏳ Loading interviews...</p>
+              <p className="text-center text-slate-400"> Loading interviews...</p>
             ) : interviews.length === 0 ? (
               <p className="text-center text-slate-400">No interviews scheduled!</p>
             ) : (
@@ -172,7 +172,7 @@ function InterviewSchedule() {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="bg-slate-100 text-slate-600 hover:bg-blue-100 hover:text-blue-700 px-3 py-1 rounded-xl text-xs font-bold transition">
-                          📅 Add to Calendar
+                           Add to Calendar
                         </a>
                       </td>
                     </tr>

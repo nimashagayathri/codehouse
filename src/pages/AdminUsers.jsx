@@ -49,7 +49,7 @@ function AdminUsers() {
 
       <div className="flex-1 p-8">
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-slate-800">User Management 👥</h2>
+          <h2 className="text-2xl font-bold text-slate-800">User Management </h2>
           <p className="text-slate-400 mt-1">Manage all platform users.</p>
         </div>
 
@@ -76,7 +76,7 @@ function AdminUsers() {
 
           <div className="p-6">
             {loading ? (
-              <div className="text-center py-10 text-slate-500 font-medium">⏳ Loading users...</div>
+              <div className="text-center py-10 text-slate-500 font-medium"> Loading users...</div>
             ) : filteredUsers.length === 0 ? (
               <div className="text-center py-10 text-slate-500 font-medium">No users found.</div>
             ) : (

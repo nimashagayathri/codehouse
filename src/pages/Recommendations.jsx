@@ -28,13 +28,13 @@ function Recommendations() {
 
             <div className="flex-1 p-8">
                 <div className="mb-8">
-                    <h2 className="text-2xl font-bold text-slate-800">AI Job Recommendations ✨</h2>
+                    <h2 className="text-2xl font-bold text-slate-800">AI Job Recommendations </h2>
                     <p className="text-slate-400 mt-1">Jobs curated specifically for you based on your unique skills and experience.</p>
                 </div>
 
                 {loading ? (
                     <div className="flex justify-center items-center h-48">
-                        <p className="text-slate-500 font-medium">⏳ Analyzing your profile...</p>
+                        <p className="text-slate-500 font-medium"> Analyzing your profile...</p>
                     </div>
                 ) : recommendations.length === 0 ? (
                     <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 text-center">
@@ -68,7 +68,7 @@ function Recommendations() {
                                 </div>
 
                                 <div className="bg-blue-50 text-blue-800 p-3 rounded-lg text-sm mb-4 border border-blue-100">
-                                    <span className="font-bold mr-2">✨ AI Insight:</span>
+                                    <span className="font-bold mr-2"> AI Insight:</span>
                                     {job.recommendationReason}
                                 </div>
 

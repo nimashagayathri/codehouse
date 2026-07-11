@@ -65,7 +65,7 @@ function RankedCandidates() {
             });
             if (data.evaluation) {
                 setDecisions({ ...decisions, [candidateId]: decision });
-                alert(`${decision} successful! ✅`);
+                alert(`${decision} successful! `);
             } else {
                 alert(data.message || 'Action failed!');
             }
@@ -84,7 +84,7 @@ function RankedCandidates() {
             <div className="flex-1 p-8">
                 <div className="mb-8 flex justify-between items-end">
                     <div>
-                        <h2 className="text-2xl font-bold text-slate-800">AI Candidate Ranking 🏆</h2>
+                        <h2 className="text-2xl font-bold text-slate-800">AI Candidate Ranking </h2>
                         <p className="text-slate-400 mt-1">Review candidates ranked by AI matching score.</p>
                     </div>
 
@@ -104,7 +104,7 @@ function RankedCandidates() {
 
                 {loading ? (
                     <div className="flex justify-center items-center h-48">
-                        <p className="text-slate-500 font-medium">⏳ Fetching AI Rankings...</p>
+                        <p className="text-slate-500 font-medium"> Fetching AI Rankings...</p>
                     </div>
                 ) : candidates.length === 0 ? (
                     <div className="bg-white p-12 rounded-2xl shadow-sm border border-slate-200 text-center">

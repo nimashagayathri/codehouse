@@ -46,13 +46,13 @@ function PostJob() {
 
       <div className="flex-1 p-8">
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-slate-800">Post a New Job 📝</h2>
+          <h2 className="text-2xl font-bold text-slate-800">Post a New Job </h2>
           <p className="text-slate-400 mt-1">Create a new job listing for candidates.</p>
         </div>
 
         {posted && (
           <div className="bg-green-50 border border-green-200 text-green-700 p-4 rounded-2xl mb-6 font-medium">
-            ✅ Job Posted Successfully!
+             Job Posted Successfully!
           </div>
         )}
 

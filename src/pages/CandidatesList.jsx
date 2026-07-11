@@ -32,7 +32,7 @@ function CandidatesList() {
 
       <div className="flex-1 p-8">
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-slate-800">Candidates List 👥</h2>
+          <h2 className="text-2xl font-bold text-slate-800">Candidates List </h2>
           <p className="text-slate-400 mt-1">Review and manage all applicants.</p>
         </div>
 
@@ -47,7 +47,7 @@ function CandidatesList() {
         </div>
 
         {loading ? (
-          <div className="text-center text-slate-400 py-12">⏳ Loading candidates...</div>
+          <div className="text-center text-slate-400 py-12"> Loading candidates...</div>
         ) : filtered.length === 0 ? (
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 text-center text-slate-400">
             No candidates found!
@@ -58,7 +58,7 @@ function CandidatesList() {
               <div key={candidate.id} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex justify-between items-center">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center text-2xl">
-                    👤
+                    
                   </div>
                   <div>
                     <h3 className="text-lg font-bold text-slate-800">{candidate.fullName}</h3>

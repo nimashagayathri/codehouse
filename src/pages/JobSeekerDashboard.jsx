@@ -8,7 +8,7 @@ function JobSeekerDashboard() {
       <div className="flex-1 p-4 md:p-8 pt-20 md:pt-0">
         {/* Header */}
         <div className="mb-8">
-          <h2 className="text-xl md:text-2xl font-bold text-slate-800">Welcome, Nimasha! 👋</h2>
+          <h2 className="text-xl md:text-2xl font-bold text-slate-800">Welcome, Nimasha! </h2>
           <p className="text-sm md:text-base text-slate-400 mt-1">Here's what's happening with your job search today.</p>
         </div>
 
@@ -17,7 +17,7 @@ function JobSeekerDashboard() {
           <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-200">
             <div className="flex items-center justify-between mb-4">
               <p className="text-sm md:text-base text-slate-500 font-medium">Applications Sent</p>
-              <span className="text-xl md:text-2xl">📨</span>
+              <span className="text-xl md:text-2xl"></span>
             </div>
             <h3 className="text-3xl md:text-4xl font-extrabold text-blue-700">5</h3>
             <p className="text-green-500 text-xs md:text-sm mt-2">↑ 2 this week</p>
@@ -25,7 +25,7 @@ function JobSeekerDashboard() {
           <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-200">
             <div className="flex items-center justify-between mb-4">
               <p className="text-sm md:text-base text-slate-500 font-medium">Interviews Scheduled</p>
-              <span className="text-xl md:text-2xl">📅</span>
+              <span className="text-xl md:text-2xl"></span>
             </div>
             <h3 className="text-3xl md:text-4xl font-extrabold text-blue-700">2</h3>
             <p className="text-green-500 text-xs md:text-sm mt-2">↑ 1 this week</p>
@@ -33,7 +33,7 @@ function JobSeekerDashboard() {
           <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-200">
             <div className="flex items-center justify-between mb-4">
               <p className="text-sm md:text-base text-slate-500 font-medium">AI Job Matches</p>
-              <span className="text-xl md:text-2xl">🤖</span>
+              <span className="text-xl md:text-2xl"></span>
             </div>
             <h3 className="text-3xl md:text-4xl font-extrabold text-blue-700">3</h3>
             <p className="text-blue-500 text-xs md:text-sm mt-2">Based on your profile</p>

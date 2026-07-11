@@ -1,36 +1,41 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  Home, FolderOpen, Calendar, Search, User, FileText,
+  Sparkles, FileEdit, Users, Award,
+  BarChart3, Settings, Shield, LogOut, Menu
+} from 'lucide-react';
 function Sidebar({ role }) {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
   const menus = {
     jobseeker: [
-      { label: 'Dashboard', icon: '🏠', path: '/jobseeker' },
-      { label: 'My Applications', icon: '📂', path: '/my-applications' },
-      { label: 'My Interviews', icon: '📅', path: '/my-interviews' },
-      { label: 'Find Jobs', icon: '🔍', path: '/jobs' },
-      { label: 'My Profile', icon: '👤', path: '/profile' },
-      { label: 'AI Resume', icon: '🤖', path: '/ai-resume' },
-      { label: 'AI Jobs', icon: '✨', path: '/recommendations' },
+      { label: 'Dashboard', icon: <Home size={18} />, path: '/jobseeker' },
+      { label: 'My Applications', icon: <FolderOpen size={18} />, path: '/my-applications' },
+      { label: 'My Interviews', icon: <Calendar size={18} />, path: '/my-interviews' },
+      { label: 'Find Jobs', icon: <Search size={18} />, path: '/jobs' },
+      { label: 'My Profile', icon: <User size={18} />, path: '/profile' },
+      { label: 'AI Resume', icon: <FileText size={18} />, path: '/ai-resume' },
+      { label: 'AI Jobs', icon: <Sparkles size={18} />, path: '/recommendations' },
     ],
     recruiter: [
-      { label: 'Dashboard', icon: '🏠', path: '/recruiter' },
-      { label: 'Post Job', icon: '📝', path: '/post-job' },
-      { label: 'Candidates', icon: '👥', path: '/candidates' },
-      { label: 'Interviews', icon: '📅', path: '/interviews' },
-      { label: 'AI Ranking', icon: '🏆', path: '/ai-ranking' },
+      { label: 'Dashboard', icon: <Home size={18} />, path: '/recruiter' },
+      { label: 'Post Job', icon: <FileEdit size={18} />, path: '/post-job' },
+      { label: 'Candidates', icon: <Users size={18} />, path: '/candidates' },
+      { label: 'Interviews', icon: <Calendar size={18} />, path: '/interviews' },
+      { label: 'AI Ranking', icon: <Award size={18} />, path: '/ai-ranking' },
     ],
     manager: [
-      { label: 'Dashboard', icon: '🏠', path: '/hiring-manager' },
-      { label: 'Candidates', icon: '👥', path: '/candidates' },
-      { label: 'Interviews', icon: '📅', path: '/interviews' },
-      { label: 'AI Ranking', icon: '🏆', path: '/ai-ranking' },
+      { label: 'Dashboard', icon: <Home size={18} />, path: '/hiring-manager' },
+      { label: 'Candidates', icon: <Users size={18} />, path: '/candidates' },
+      { label: 'Interviews', icon: <Calendar size={18} />, path: '/interviews' },
+      { label: 'AI Ranking', icon: <Award size={18} />, path: '/ai-ranking' },
     ],
     admin: [
-      { label: 'Dashboard', icon: '🏠', path: '/admin' },
-      { label: 'Users', icon: '👥', path: '/users' },
-      { label: 'Analytics', icon: '📊', path: '/analytics' },
+      { label: 'Dashboard', icon: <Home size={18} />, path: '/admin' },
+      { label: 'Users', icon: <Shield size={18} />, path: '/users' },
+      { label: 'Analytics', icon: <BarChart3 size={18} />, path: '/analytics' },
     ],
   };
 
@@ -41,7 +46,10 @@ function Sidebar({ role }) {
     setIsOpen(false); // Close menu after navigation on mobile
   };
 
-  const handleLogout = () => { localStorage.clear(); navigate('/login'); };
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate('/');
+  };
 
   return (
     <>
@@ -56,18 +64,15 @@ function Sidebar({ role }) {
           onClick={() => setIsOpen(!isOpen)}
           className="text-white text-2xl focus:outline-none"
         >
-          ☰
+          <Menu size={24} />
         </button>
       </div>
 
       {/* Desktop Sidebar (Hidden on Mobile) */}
       <div className="hidden md:flex md:w-64 md:min-h-screen bg-blue-900 text-white flex-col fixed md:relative">
         {/* Logo */}
-        <div className="p-6 border-b border-blue-800">
-          <h1 className="text-2xl font-extrabold">
-            Code<span className="text-blue-300">House</span>
-          </h1>
-          <p className="text-blue-400 text-xs mt-1">AI Recruitment Platform</p>
+        <div className="p-4 border-b border-blue-800 flex justify-center bg-white rounded-tr-3xl mb-4 h-24 items-center overflow-visible">
+          <img src="/logo.png" alt="CodeHouse" className="h-32 md:h-40 object-contain transform scale-[2]" />
         </div>
 
         {/* Desktop Menu */}
@@ -81,7 +86,7 @@ function Sidebar({ role }) {
                 : 'hover:bg-blue-800'
                 }`}
             >
-              <span className="text-xl">{item.icon}</span>
+              <span className="flex justify-center items-center h-6 w-6">{item.icon}</span>
               <span className="font-medium">{item.label}</span>
             </button>
           ))}
@@ -90,7 +95,7 @@ function Sidebar({ role }) {
         {/* Logout */}
         <div className="p-4 border-t border-blue-800">
           <button onClick={handleLogout} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-blue-800 transition duration-200">
-            <span className="text-xl">🚪</span>
+            <LogOut size={20} />
             <span className="font-medium">Logout</span>
           </button>
         </div>
@@ -109,7 +114,7 @@ function Sidebar({ role }) {
                   : 'hover:bg-blue-800'
                   }`}
               >
-                <span className="text-xl">{item.icon}</span>
+                <span className="flex justify-center items-center h-6 w-6">{item.icon}</span>
                 <span className="font-medium">{item.label}</span>
               </button>
             ))}
@@ -117,7 +122,7 @@ function Sidebar({ role }) {
           {/* Logout in mobile menu */}
           <div className="p-4 border-t border-blue-800">
             <button onClick={handleLogout} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-blue-800 transition duration-200">
-              <span className="text-xl">🚪</span>
+              <LogOut size={20} />
               <span className="font-medium">Logout</span>
             </button>
           </div>

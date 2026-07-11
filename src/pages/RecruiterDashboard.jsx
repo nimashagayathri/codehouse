@@ -7,7 +7,7 @@ function RecruiterDashboard() {
 
       <div className="flex-1 p-4 md:p-8 pt-20 md:pt-0">
         <div className="mb-8">
-          <h2 className="text-xl md:text-2xl font-bold text-slate-800">Recruiter Dashboard 👔</h2>
+          <h2 className="text-xl md:text-2xl font-bold text-slate-800">Recruiter Dashboard </h2>
           <p className="text-sm md:text-base text-slate-400 mt-1">Manage your job postings and candidates.</p>
         </div>
 
@@ -15,7 +15,7 @@ function RecruiterDashboard() {
           <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-200">
             <div className="flex items-center justify-between mb-4">
               <p className="text-sm md:text-base text-slate-500 font-medium">Active Job Posts</p>
-              <span className="text-xl md:text-2xl">📋</span>
+              <span className="text-xl md:text-2xl"></span>
             </div>
             <h3 className="text-3xl md:text-4xl font-extrabold text-blue-700">8</h3>
             <p className="text-green-500 text-xs md:text-sm mt-2">↑ 3 this week</p>
@@ -23,7 +23,7 @@ function RecruiterDashboard() {
           <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-200">
             <div className="flex items-center justify-between mb-4">
               <p className="text-sm md:text-base text-slate-500 font-medium">Total Applications</p>
-              <span className="text-xl md:text-2xl">📨</span>
+              <span className="text-xl md:text-2xl"></span>
             </div>
             <h3 className="text-3xl md:text-4xl font-extrabold text-blue-700">124</h3>
             <p className="text-green-500 text-xs md:text-sm mt-2">↑ 12 this week</p>
@@ -31,7 +31,7 @@ function RecruiterDashboard() {
           <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-200">
             <div className="flex items-center justify-between mb-4">
               <p className="text-sm md:text-base text-slate-500 font-medium">Interviews Scheduled</p>
-              <span className="text-xl md:text-2xl">📅</span>
+              <span className="text-xl md:text-2xl"></span>
             </div>
             <h3 className="text-3xl md:text-4xl font-extrabold text-blue-700">15</h3>
             <p className="text-green-500 text-xs md:text-sm mt-2">↑ 5 this week</p>

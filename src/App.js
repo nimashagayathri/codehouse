@@ -17,12 +17,13 @@ import Recommendations from './pages/Recommendations';
 import RankedCandidates from './pages/RankedCandidates';
 import MyApplications from './pages/MyApplications';
 import MyInterviews from './pages/MyInterviews';
+import Landing from './pages/Landing';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/jobseeker" element={<JobSeekerDashboard />} />

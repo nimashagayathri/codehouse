@@ -51,7 +51,7 @@ function HiringManagerDashboard() {
       });
       if (data.evaluation) {
         setDecisions({ ...decisions, [candidate.id]: decision });
-        alert(`${candidate.name} - ${decision}! ✅`);
+        alert(`${candidate.name} - ${decision}! `);
       } else {
         alert(data.message || 'Failed!');
       }
@@ -67,7 +67,7 @@ function HiringManagerDashboard() {
 
       <div className="flex-1 p-8">
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-slate-800">Hiring Manager Dashboard 🎯</h2>
+          <h2 className="text-2xl font-bold text-slate-800">Hiring Manager Dashboard </h2>
           <p className="text-slate-400 mt-1">Review candidates and make hiring decisions.</p>
         </div>
 
@@ -75,7 +75,7 @@ function HiringManagerDashboard() {
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
             <div className="flex items-center justify-between mb-4">
               <p className="text-slate-500 font-medium">Shortlisted Candidates</p>
-              <span className="text-2xl">👥</span>
+              <span className="text-2xl"></span>
             </div>
             <h3 className="text-4xl font-extrabold text-blue-700">12</h3>
             <p className="text-green-500 text-sm mt-2">↑ 4 this week</p>
@@ -83,7 +83,7 @@ function HiringManagerDashboard() {
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
             <div className="flex items-center justify-between mb-4">
               <p className="text-slate-500 font-medium">Pending Interviews</p>
-              <span className="text-2xl">📅</span>
+              <span className="text-2xl"></span>
             </div>
             <h3 className="text-4xl font-extrabold text-blue-700">5</h3>
             <p className="text-yellow-500 text-sm mt-2">→ Awaiting feedback</p>
@@ -91,7 +91,7 @@ function HiringManagerDashboard() {
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
             <div className="flex items-center justify-between mb-4">
               <p className="text-slate-500 font-medium">Hired This Month</p>
-              <span className="text-2xl">🎉</span>
+              <span className="text-2xl"></span>
             </div>
             <h3 className="text-4xl font-extrabold text-blue-700">3</h3>
             <p className="text-green-500 text-sm mt-2">↑ 1 this month</p>
@@ -124,7 +124,7 @@ function HiringManagerDashboard() {
                             ? 'bg-green-100 text-green-700'
                             : 'bg-red-100 text-red-700'
                           }`}>
-                          {decisions[candidate.id]} ✅
+                          {decisions[candidate.id]} 
                         </span>
                       ) : (
                         <div className="flex gap-2">
@@ -133,14 +133,14 @@ function HiringManagerDashboard() {
                             disabled={loading[candidate.id]}
                             className="bg-green-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-600 font-semibold"
                           >
-                            {loading[candidate.id] ? '⏳' : 'Hire'}
+                            {loading[candidate.id] ? '' : 'Hire'}
                           </button>
                           <button
                             onClick={() => handleDecision(candidate, 'Rejected')}
                             disabled={loading[candidate.id]}
                             className="bg-red-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-red-600 font-semibold"
                           >
-                            {loading[candidate.id] ? '⏳' : 'Reject'}
+                            {loading[candidate.id] ? '' : 'Reject'}
                           </button>
                         </div>
                       )}

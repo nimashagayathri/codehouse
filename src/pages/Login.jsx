@@ -5,7 +5,7 @@ import { loginUser } from '../api';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showHint, setShowHint] = useState(true);
+  const [showHint, setShowHint] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -44,23 +44,20 @@ function Login() {
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
 
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-800 rounded-2xl mb-4 shadow-lg">
-            <span className="text-3xl">🎯</span>
+        <div className="text-center mb-6 mt-2">
+          <div className="h-20 flex items-center justify-center overflow-visible mb-2">
+            <img src="/logo.png" alt="CodeHouse" className="h-48 md:h-64 object-contain transform scale-[1.5]" />
           </div>
-          <h1 className="text-4xl font-extrabold text-slate-800 tracking-tight">
-            Code<span className="text-blue-700">House</span>
-          </h1>
-          <p className="text-slate-400 mt-2 text-sm">AI-Powered Recruitment Platform</p>
+          <p className="text-slate-500 mt-2 text-sm font-semibold uppercase tracking-widest">AI Recruitment Platform</p>
         </div>
 
-        <div className="bg-white p-8 rounded-2xl shadow-lg border border-slate-200">
-          <h2 className="text-xl font-bold text-slate-800 mb-1">Welcome back 👋</h2>
+        <div className="bg-white p-8 rounded-3xl shadow-xl shadow-blue-900/5 border border-slate-100">
+          <h2 className="text-2xl font-bold text-slate-800 mb-2">Welcome back</h2>
           <p className="text-slate-400 text-sm mb-6">Sign in to continue to Code House</p>
 
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-600 p-3 rounded-xl mb-4 text-sm">
-              ⚠️ {error}
+              ️ {error}
             </div>
           )}
 
@@ -92,7 +89,7 @@ function Login() {
             disabled={loading}
             className="w-full bg-blue-800 hover:bg-blue-900 text-white p-3 rounded-xl font-bold transition duration-300 shadow-md"
           >
-            {loading ? '⏳ Signing in...' : 'Sign In '}
+            {loading ? ' Signing in...' : 'Sign In '}
           </button>
 
           <div className="flex items-center gap-3 my-5">

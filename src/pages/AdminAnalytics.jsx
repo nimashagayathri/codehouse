@@ -32,17 +32,17 @@ function AdminAnalytics() {
       <div className="flex min-h-screen bg-slate-50">
         <Sidebar role="admin" />
         <div className="flex-1 flex justify-center items-center h-screen">
-          <p className="text-slate-500 font-medium text-lg">⏳ Loading System Analytics...</p>
+          <p className="text-slate-500 font-medium text-lg"> Loading System Analytics...</p>
         </div>
       </div>
     );
   }
 
   const stats = [
-    { label: "Total Candidates", value: summary?.totalCandidates || 0, color: "text-blue-700", icon: "👥" },
-    { label: "Active Jobs", value: summary?.activeJobs || 0, color: "text-green-600", icon: "💼" },
-    { label: "Applications", value: summary?.totalApplications || 0, color: "text-purple-600", icon: "📨" },
-    { label: "Hiring Rate", value: summary?.totalApplications > 0 ? `${Math.round((summary?.hiredApplications / summary?.totalApplications) * 100)}%` : "0%", color: "text-yellow-600", icon: "🎉" },
+    { label: "Total Candidates", value: summary?.totalCandidates || 0, color: "text-blue-700", icon: "" },
+    { label: "Active Jobs", value: summary?.activeJobs || 0, color: "text-green-600", icon: "" },
+    { label: "Applications", value: summary?.totalApplications || 0, color: "text-purple-600", icon: "" },
+    { label: "Hiring Rate", value: summary?.totalApplications > 0 ? `${Math.round((summary?.hiredApplications / summary?.totalApplications) * 100)}%` : "0%", color: "text-yellow-600", icon: "" },
   ];
 
   // Render recent 6 months for table
@@ -57,7 +57,7 @@ function AdminAnalytics() {
 
       <div className="flex-1 p-8">
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-slate-800">Analytics Dashboard 📊</h2>
+          <h2 className="text-2xl font-bold text-slate-800">Analytics Dashboard </h2>
           <p className="text-slate-400 mt-1">Monitor platform performance and recruitment trends.</p>
         </div>
 
@@ -77,7 +77,7 @@ function AdminAnalytics() {
         {/* Monthly Table */}
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 mb-6">
           <div className="p-6 border-b border-slate-100">
-            <h3 className="text-lg font-bold text-slate-800">Monthly Recruitment Data 📅</h3>
+            <h3 className="text-lg font-bold text-slate-800">Monthly Recruitment Data </h3>
           </div>
           <div className="p-6">
             <table className="w-full text-left">
@@ -111,7 +111,7 @@ function AdminAnalytics() {
 
         {/* Top Jobs */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-          <h3 className="text-lg font-bold text-slate-800 mb-6">Top Job Categories 🏆</h3>
+          <h3 className="text-lg font-bold text-slate-800 mb-6">Top Job Categories </h3>
           <div className="space-y-4">
             {topJobs.length > 0 ? topJobs.slice(0, 5).map((item, index) => (
               <div key={item.jobPostingId}>

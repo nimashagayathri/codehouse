@@ -41,7 +41,7 @@ function MyInterviews() {
 
             <div className="flex-1 p-8">
                 <div className="mb-8">
-                    <h2 className="text-2xl font-bold text-slate-800">My Interviews 📅</h2>
+                    <h2 className="text-2xl font-bold text-slate-800">My Interviews </h2>
                     <p className="text-slate-400 mt-1">View your scheduled interviews and add them to your calendar.</p>
                 </div>
 
@@ -51,10 +51,10 @@ function MyInterviews() {
                     </div>
                     <div className="p-6">
                         {loading ? (
-                            <p className="text-center text-slate-400 py-8 font-medium">⏳ Loading your interviews...</p>
+                            <p className="text-center text-slate-400 py-8 font-medium"> Loading your interviews...</p>
                         ) : interviews.length === 0 ? (
                             <div className="text-center py-12">
-                                <span className="text-4xl mb-4 block">🏝️</span>
+                                <span className="text-4xl mb-4 block">️</span>
                                 <p className="text-slate-500 font-medium text-lg">No interviews scheduled yet.</p>
                                 <p className="text-slate-400 text-sm mt-1">Keep applying to jobs to get noticed!</p>
                             </div>
@@ -77,15 +77,15 @@ function MyInterviews() {
 
                                         <div className="space-y-3 mb-6">
                                             <div className="flex items-center text-slate-600 text-sm">
-                                                <span className="mr-3">🕒</span>
+                                                <span className="mr-3"></span>
                                                 {new Date(interview.scheduledAt || interview.createdAt).toLocaleString()}
                                             </div>
                                             <div className="flex items-center text-slate-600 text-sm">
-                                                <span className="mr-3">📍</span>
+                                                <span className="mr-3"></span>
                                                 <span className="truncate" title={interview.meetingLink || interview.location}>{interview.meetingLink || interview.location || 'TBA'}</span>
                                             </div>
                                             <div className="flex items-center text-slate-600 text-sm">
-                                                <span className="mr-3">👤</span>
+                                                <span className="mr-3"></span>
                                                 Interviewer: {interview.scheduledByName}
                                             </div>
                                         </div>
@@ -96,7 +96,7 @@ function MyInterviews() {
                                             rel="noopener noreferrer"
                                             className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl font-bold transition duration-200 text-sm"
                                         >
-                                            ➕ Add to Google Calendar
+                                             Add to Google Calendar
                                         </a>
                                     </div>
                                 ))}
