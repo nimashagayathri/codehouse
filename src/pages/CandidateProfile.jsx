@@ -44,12 +44,15 @@ function CandidateProfile() {
         ...profile,
         skills: skills.join(', ')
       });
-      if (data.id) {
+      // The backend returns an object like { message: "...", profile: { ... } }
+      if (data.profile) {
         setSaved(true);
         setTimeout(() => setSaved(false), 3000);
+      } else {
+        alert(data.message || 'Failed to save profile!');
       }
     } catch (err) {
-      alert('Failed to save profile!');
+      alert('Connection failed!');
     }
   };
 
@@ -89,26 +92,26 @@ function CandidateProfile() {
             <div>
               <label className="block text-slate-600 mb-2 text-sm font-semibold">Full Name</label>
               <input type="text" value={profile.fullName}
-                onChange={(e) => setProfile({...profile, fullName: e.target.value})}
-                className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition"/>
+                onChange={(e) => setProfile({ ...profile, fullName: e.target.value })}
+                className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition" />
             </div>
             <div>
               <label className="block text-slate-600 mb-2 text-sm font-semibold">Phone</label>
               <input type="text" value={profile.phone}
-                onChange={(e) => setProfile({...profile, phone: e.target.value})}
-                className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition"/>
+                onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
+                className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition" />
             </div>
             <div>
               <label className="block text-slate-600 mb-2 text-sm font-semibold">Location</label>
               <input type="text" value={profile.location}
-                onChange={(e) => setProfile({...profile, location: e.target.value})}
-                className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition"/>
+                onChange={(e) => setProfile({ ...profile, location: e.target.value })}
+                className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition" />
             </div>
             <div>
               <label className="block text-slate-600 mb-2 text-sm font-semibold">Summary</label>
               <input type="text" value={profile.summary}
-                onChange={(e) => setProfile({...profile, summary: e.target.value})}
-                className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition"/>
+                onChange={(e) => setProfile({ ...profile, summary: e.target.value })}
+                className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition" />
             </div>
           </div>
         </div>
@@ -129,7 +132,7 @@ function CandidateProfile() {
               value={newSkill}
               onChange={(e) => setNewSkill(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleAddSkill()}
-              className="flex-1 border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition"/>
+              className="flex-1 border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition" />
             <button onClick={handleAddSkill}
               className="bg-blue-700 text-white px-4 py-2 rounded-xl hover:bg-blue-800 font-semibold">
               Add

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 function Sidebar({ role }) {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
@@ -11,17 +10,20 @@ function Sidebar({ role }) {
       { label: 'Find Jobs', icon: '🔍', path: '/jobs' },
       { label: 'My Profile', icon: '👤', path: '/profile' },
       { label: 'AI Resume', icon: '🤖', path: '/ai-resume' },
+      { label: 'AI Jobs', icon: '✨', path: '/recommendations' },
     ],
     recruiter: [
       { label: 'Dashboard', icon: '🏠', path: '/recruiter' },
       { label: 'Post Job', icon: '📝', path: '/post-job' },
       { label: 'Candidates', icon: '👥', path: '/candidates' },
       { label: 'Interviews', icon: '📅', path: '/interviews' },
+      { label: 'AI Ranking', icon: '🏆', path: '/ai-ranking' },
     ],
     manager: [
       { label: 'Dashboard', icon: '🏠', path: '/hiring-manager' },
       { label: 'Candidates', icon: '👥', path: '/candidates' },
       { label: 'Interviews', icon: '📅', path: '/interviews' },
+      { label: 'AI Ranking', icon: '🏆', path: '/ai-ranking' },
     ],
     admin: [
       { label: 'Dashboard', icon: '🏠', path: '/admin' },
@@ -72,11 +74,10 @@ function Sidebar({ role }) {
             <button
               key={item.path}
               onClick={() => handleNavigation(item.path)}
-              className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition duration-200 ${
-                window.location.pathname === item.path
-                  ? 'bg-blue-700'
-                  : 'hover:bg-blue-800'
-              }`}
+              className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition duration-200 ${window.location.pathname === item.path
+                ? 'bg-blue-700'
+                : 'hover:bg-blue-800'
+                }`}
             >
               <span className="text-xl">{item.icon}</span>
               <span className="font-medium">{item.label}</span>
@@ -101,11 +102,10 @@ function Sidebar({ role }) {
               <button
                 key={item.path}
                 onClick={() => handleNavigation(item.path)}
-                className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition duration-200 ${
-                  window.location.pathname === item.path
-                    ? 'bg-blue-700'
-                    : 'hover:bg-blue-800'
-                }`}
+                className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition duration-200 ${window.location.pathname === item.path
+                  ? 'bg-blue-700'
+                  : 'hover:bg-blue-800'
+                  }`}
               >
                 <span className="text-xl">{item.icon}</span>
                 <span className="font-medium">{item.label}</span>

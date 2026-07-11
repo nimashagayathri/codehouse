@@ -1,6 +1,44 @@
+﻿import { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 
+const API_URL = 'http://localhost:5223';
+
 function AdminDashboard() {
+  const [users, setUsers] = useState([]);
+  const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch(API_URL + '/api/admin/users', {
+        headers: { Authorization: 'Bearer ' + token }
+      });
+      const data = await response.json();
+      if (Array.isArray(data)) setUsers(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const toggleUserStatus = async (id, isActive) => {
+    try {
+      await fetch(API_URL + '/api/admin/users/' + id + '/status', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token
+        },
+        body: JSON.stringify({ isActive: !isActive })
+      });
+      fetchUsers();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <div className="flex min-h-screen bg-slate-50">
       <Sidebar role="admin" />
@@ -17,7 +55,7 @@ function AdminDashboard() {
               <p className="text-sm md:text-base text-slate-500 font-medium">Total Users</p>
               <span className="text-xl md:text-2xl">👥</span>
             </div>
-            <h3 className="text-3xl md:text-4xl font-extrabold text-blue-700">245</h3>
+            <h3 className="text-3xl md:text-4xl font-extrabold text-blue-700">{users.length > 0 ? users.length : '-'}</h3>
             <p className="text-green-500 text-xs md:text-sm mt-2">↑ 12 this week</p>
           </div>
           <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-200">
@@ -62,27 +100,25 @@ function AdminDashboard() {
                 </tr>
               </thead>
               <tbody>
-                <tr className="border-b border-slate-50">
-                  <td className="py-3 text-slate-700 font-medium">Kasun Perera</td>
-                  <td className="text-slate-500">kasun@gmail.com</td>
-                  <td className="text-slate-500">Job Seeker</td>
-                  <td><span className="bg-green-100 text-green-700 px-2 md:px-3 py-1 rounded-full text-xs font-semibold">Active</span></td>
-                  <td><button className="bg-red-500 text-white px-2 md:px-3 py-1 rounded-lg text-xs md:text-sm hover:bg-red-600">Disable</button></td>
-                </tr>
-                <tr className="border-b border-slate-50">
-                  <td className="py-3 text-slate-700 font-medium">Saman Silva</td>
-                  <td className="text-slate-500">saman@gmail.com</td>
-                  <td className="text-slate-500">Recruiter</td>
-                  <td><span className="bg-green-100 text-green-700 px-2 md:px-3 py-1 rounded-full text-xs font-semibold">Active</span></td>
-                  <td><button className="bg-red-500 text-white px-2 md:px-3 py-1 rounded-lg text-xs md:text-sm hover:bg-red-600">Disable</button></td>
-                </tr>
-                <tr>
-                  <td className="py-3 text-slate-700 font-medium">Dilani Fernando</td>
-                  <td className="text-slate-500">dilani@gmail.com</td>
-                  <td className="text-slate-500">Hiring Manager</td>
-                  <td><span className="bg-red-100 text-red-700 px-2 md:px-3 py-1 rounded-full text-xs font-semibold">Disabled</span></td>
-                  <td><button className="bg-green-500 text-white px-2 md:px-3 py-1 rounded-lg text-xs md:text-sm hover:bg-green-600">Enable</button></td>
-                </tr>
+                {users.map(user => (
+                  <tr key={user.id} className="border-b border-slate-50">
+                    <td className="py-3 text-slate-700 font-medium">{user.fullName || '-'}</td>
+                    <td className="text-slate-500">{user.email}</td>
+                    <td className="text-slate-500">{user.role}</td>
+                    <td>
+                      <span className={"px-2 md:px-3 py-1 rounded-full text-xs font-semibold " + (user.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700')}>
+                        {user.isActive ? 'Active' : 'Disabled'}
+                      </span>
+                    </td>
+                    <td>
+                      <button
+                        onClick={() => toggleUserStatus(user.id, user.isActive)}
+                        className={"text-white px-2 md:px-3 py-1 rounded-lg text-xs md:text-sm " + (user.isActive ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600')}>
+                        {user.isActive ? 'Disable' : 'Enable'}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

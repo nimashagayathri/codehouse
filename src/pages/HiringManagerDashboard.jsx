@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 import { evaluateCandidate } from '../api';
+
+const API_URL = 'http://localhost:5223';
 
 function HiringManagerDashboard() {
   const [decisions, setDecisions] = useState({});
@@ -11,6 +13,32 @@ function HiringManagerDashboard() {
     { id: 2, name: "Saman Silva", position: "UI/UX Designer", date: "2026-07-03", appId: 2 },
     { id: 3, name: "Dilani Fernando", position: "Frontend Developer", date: "2026-07-05", appId: 3 },
   ];
+
+  useEffect(() => {
+    const fetchDecisions = async () => {
+      const token = localStorage.getItem('token');
+      const newDecisions = {};
+
+      for (const candidate of candidates) {
+        try {
+          const res = await fetch(`${API_URL}/api/evaluations/application/${candidate.appId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data.decision) {
+              newDecisions[candidate.id] = data.decision;
+            }
+          }
+        } catch (err) {
+          console.error('Failed to fetch evaluation for appId', candidate.appId);
+        }
+      }
+      setDecisions(newDecisions);
+    };
+
+    fetchDecisions();
+  }, []);
 
   const handleDecision = async (candidate, decision) => {
     setLoading({ ...loading, [candidate.id]: true });
@@ -92,11 +120,10 @@ function HiringManagerDashboard() {
                     <td className="text-slate-500">{candidate.date}</td>
                     <td>
                       {decisions[candidate.id] ? (
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          decisions[candidate.id] === 'Hired'
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${decisions[candidate.id] === 'Hired'
                             ? 'bg-green-100 text-green-700'
                             : 'bg-red-100 text-red-700'
-                        }`}>
+                          }`}>
                           {decisions[candidate.id]} ✅
                         </span>
                       ) : (

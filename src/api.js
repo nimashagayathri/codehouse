@@ -66,7 +66,13 @@ export const getCandidateProfile = async () => {
 
 export const updateCandidateProfile = async (profileData) => {
   const token = localStorage.getItem('token');
-  const response = await fetch(`${API_URL}/api/candidates/profile`, {
+
+  // profileData may not have yearsOfExperience set initially, default it to 0
+  if (profileData.yearsOfExperience === undefined) {
+    profileData.yearsOfExperience = 0;
+  }
+
+  let response = await fetch(`${API_URL}/api/candidates/profile`, {
     method: 'PUT',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -74,6 +80,19 @@ export const updateCandidateProfile = async (profileData) => {
     },
     body: JSON.stringify(profileData)
   });
+
+  // If the profile does not exist yet, backend returns 404. We should create it via POST
+  if (response.status === 404) {
+    response = await fetch(`${API_URL}/api/candidates/profile`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(profileData)
+    });
+  }
+
   return response.json();
 };
 
@@ -153,5 +172,38 @@ export const evaluateCandidate = async (data) => {
     }
   }
 
+  return response.json();
+};
+
+export const getJobRecommendations = async () => {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${API_URL}/api/applications/recommendations`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }
+  });
+  return response.json();
+};
+
+export const getRankedApplications = async (jobId) => {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${API_URL}/api/applications/ranked/${jobId}`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }
+  });
+  return response.json();
+};
+
+export const getMyApplications = async () => {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${API_URL}/api/applications/my-applications`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }
+  });
   return response.json();
 };

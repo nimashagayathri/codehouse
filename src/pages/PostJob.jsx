@@ -1,21 +1,40 @@
 import { useState } from 'react';
 import Sidebar from '../components/Sidebar';
+import { postJob } from '../api';
 
 function PostJob() {
   const [form, setForm] = useState({
     title: '', company: '', location: '', type: '', salary: '', skills: '', description: ''
   });
   const [posted, setPosted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handlePost = () => {
+  const handlePost = async () => {
     if (form.title && form.company && form.location && form.type) {
-      setPosted(true);
-      setTimeout(() => setPosted(false), 3000);
-      setForm({ title: '', company: '', location: '', type: '', salary: '', skills: '', description: '' });
+      setLoading(true);
+      try {
+        const payload = {
+          title: form.title,
+          description: form.description || form.title,
+          requiredSkills: form.skills || '',
+          location: form.location,
+          salary: form.salary ? parseInt(form.salary.replace(/,/g, '')) || 0 : 0,
+          employmentType: form.type
+        };
+        const data = await postJob(payload);
+        if (data.id || data.message) {
+          setPosted(true);
+          setTimeout(() => setPosted(false), 3000);
+          setForm({ title: '', company: '', location: '', type: '', salary: '', skills: '', description: '' });
+        }
+      } catch (err) {
+        alert('Failed to post job. Please try again.');
+      }
+      setLoading(false);
     } else {
       alert('Please fill all required fields!');
     }
@@ -42,21 +61,21 @@ function PostJob() {
             <label className="block text-slate-600 mb-2 text-sm font-semibold">Job Title *</label>
             <input type="text" name="title" value={form.title} onChange={handleChange}
               placeholder="e.g. Software Engineer"
-              className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition"/>
+              className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition" />
           </div>
 
           <div className="mb-5">
             <label className="block text-slate-600 mb-2 text-sm font-semibold">Company *</label>
             <input type="text" name="company" value={form.company} onChange={handleChange}
               placeholder="e.g. Google"
-              className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition"/>
+              className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition" />
           </div>
 
           <div className="mb-5">
             <label className="block text-slate-600 mb-2 text-sm font-semibold">Location *</label>
             <input type="text" name="location" value={form.location} onChange={handleChange}
               placeholder="e.g. Colombo / Remote"
-              className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition"/>
+              className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition" />
           </div>
 
           <div className="mb-5">
@@ -75,21 +94,21 @@ function PostJob() {
             <label className="block text-slate-600 mb-2 text-sm font-semibold">Salary (LKR)</label>
             <input type="text" name="salary" value={form.salary} onChange={handleChange}
               placeholder="e.g. 150,000"
-              className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition"/>
+              className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition" />
           </div>
 
           <div className="mb-5">
             <label className="block text-slate-600 mb-2 text-sm font-semibold">Required Skills</label>
             <input type="text" name="skills" value={form.skills} onChange={handleChange}
               placeholder="e.g. React, Node.js, SQL"
-              className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition"/>
+              className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition" />
           </div>
 
           <div className="mb-6">
             <label className="block text-slate-600 mb-2 text-sm font-semibold">Job Description</label>
             <textarea rows="5" name="description" value={form.description} onChange={handleChange}
               placeholder="Describe the job role..."
-              className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition"/>
+              className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition" />
           </div>
 
           <button onClick={handlePost}
