@@ -5,7 +5,7 @@ import { loginUser } from '../api';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showHint, setShowHint] = useState(false);
+  const [showHint, setShowHint] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();

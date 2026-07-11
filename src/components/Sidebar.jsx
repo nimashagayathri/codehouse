@@ -8,6 +8,7 @@ function Sidebar({ role }) {
     jobseeker: [
       { label: 'Dashboard', icon: '🏠', path: '/jobseeker' },
       { label: 'My Applications', icon: '📂', path: '/my-applications' },
+      { label: 'My Interviews', icon: '📅', path: '/my-interviews' },
       { label: 'Find Jobs', icon: '🔍', path: '/jobs' },
       { label: 'My Profile', icon: '👤', path: '/profile' },
       { label: 'AI Resume', icon: '🤖', path: '/ai-resume' },

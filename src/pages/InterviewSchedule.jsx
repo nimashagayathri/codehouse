@@ -33,6 +33,19 @@ function InterviewSchedule() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const generateGoogleCalendarUrl = (interview) => {
+    const title = encodeURIComponent(`Interview for ${interview.jobTitle} at CodeHouse`);
+    const details = encodeURIComponent(`Candidate: ${interview.candidateName}\nMode: ${interview.mode}\nNotes: ${interview.notes || 'None'}`);
+    const location = encodeURIComponent(interview.meetingLink || interview.location || 'TBA');
+
+    const date = new Date(interview.scheduledAt || interview.createdAt);
+    const endDate = new Date(date.getTime() + 60 * 60 * 1000); // 1 hour
+
+    const formatGoogleDate = (d) => d.toISOString().replace(/-|:|\.\d\d\d/g, "");
+
+    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&location=${location}&dates=${formatGoogleDate(date)}/${formatGoogleDate(endDate)}`;
+  };
+
   const handleSchedule = async () => {
     if (form.jobApplicationId && form.scheduledAt && form.mode) {
       try {
@@ -83,12 +96,12 @@ function InterviewSchedule() {
               <label className="block text-slate-600 mb-2 text-sm font-semibold">Application ID</label>
               <input type="number" name="jobApplicationId" value={form.jobApplicationId} onChange={handleChange}
                 placeholder="e.g. 1"
-                className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition"/>
+                className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition" />
             </div>
             <div>
               <label className="block text-slate-600 mb-2 text-sm font-semibold">Date & Time</label>
               <input type="datetime-local" name="scheduledAt" value={form.scheduledAt} onChange={handleChange}
-                className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition"/>
+                className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition" />
             </div>
             <div>
               <label className="block text-slate-600 mb-2 text-sm font-semibold">Interview Mode</label>
@@ -103,13 +116,13 @@ function InterviewSchedule() {
               <label className="block text-slate-600 mb-2 text-sm font-semibold">Location / Link</label>
               <input type="text" name="location" value={form.location} onChange={handleChange}
                 placeholder="e.g. Google Meet / Office"
-                className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition"/>
+                className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition" />
             </div>
             <div className="col-span-2">
               <label className="block text-slate-600 mb-2 text-sm font-semibold">Notes</label>
               <input type="text" name="notes" value={form.notes} onChange={handleChange}
                 placeholder="e.g. Please join on time"
-                className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition"/>
+                className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition" />
             </div>
           </div>
           <button onClick={handleSchedule}
@@ -137,6 +150,7 @@ function InterviewSchedule() {
                     <th className="pb-3 text-slate-400 font-medium text-sm">Date</th>
                     <th className="pb-3 text-slate-400 font-medium text-sm">Mode</th>
                     <th className="pb-3 text-slate-400 font-medium text-sm">Status</th>
+                    <th className="pb-3 text-slate-400 font-medium text-sm">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -147,11 +161,19 @@ function InterviewSchedule() {
                       <td className="text-slate-500">{new Date(interview.scheduledAt || interview.createdAt).toLocaleDateString()}</td>
                       <td><span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">{interview.mode}</span></td>
                       <td>
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          interview.status === "Scheduled" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
-                        }`}>
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${interview.status === "Scheduled" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
+                          }`}>
                           {interview.status}
                         </span>
+                      </td>
+                      <td>
+                        <a
+                          href={generateGoogleCalendarUrl(interview)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="bg-slate-100 text-slate-600 hover:bg-blue-100 hover:text-blue-700 px-3 py-1 rounded-xl text-xs font-bold transition">
+                          📅 Add to Calendar
+                        </a>
                       </td>
                     </tr>
                   ))}
