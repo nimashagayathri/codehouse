@@ -37,6 +37,14 @@ function RankedCandidates() {
             const data = await getRankedApplications(jobId);
             if (Array.isArray(data)) {
                 setCandidates(data);
+
+                let initialDecisions = {};
+                data.forEach(c => {
+                    if (c.status === 'Hired') initialDecisions[c.candidateProfileId] = 'Hired';
+                    else if (c.status === 'Shortlisted') initialDecisions[c.candidateProfileId] = 'Recommended';
+                    else if (c.status === 'Rejected') initialDecisions[c.candidateProfileId] = 'Rejected';
+                });
+                setDecisions(initialDecisions);
             }
         } catch (err) {
             console.error('Failed to load ranked candidates', err);
@@ -50,8 +58,10 @@ function RankedCandidates() {
             const data = await evaluateCandidate({
                 jobApplicationId: applicationId,
                 decision: decision,
-                notes: `${decision} via AI Ranking Dashboard`,
-                score: decision === 'Hired' ? 90 : 40
+                feedback: `${decision} via AI Ranking Dashboard`,
+                technicalScore: decision === 'Hired' ? 9 : 7,
+                communicationScore: decision === 'Hired' ? 9 : 7,
+                experienceScore: decision === 'Hired' ? 9 : 7
             });
             if (data.evaluation) {
                 setDecisions({ ...decisions, [candidateId]: decision });
@@ -138,10 +148,10 @@ function RankedCandidates() {
                                 <div className="w-32 border-l border-slate-100 pl-6 flex flex-col gap-2">
                                     {decisions[candidate.candidateProfileId] ? (
                                         <span className={`w-full text-center px-3 py-2 rounded-lg text-xs font-bold ${decisions[candidate.candidateProfileId] === 'Hired'
-                                                ? 'bg-green-100 text-green-700'
-                                                : decisions[candidate.candidateProfileId] === 'Recommended'
-                                                    ? 'bg-yellow-100 text-yellow-700'
-                                                    : 'bg-red-100 text-red-700'
+                                            ? 'bg-green-100 text-green-700'
+                                            : decisions[candidate.candidateProfileId] === 'Recommended'
+                                                ? 'bg-yellow-100 text-yellow-700'
+                                                : 'bg-red-100 text-red-700'
                                             }`}>
                                             {decisions[candidate.candidateProfileId]}
                                         </span>
