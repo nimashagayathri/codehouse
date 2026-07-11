@@ -97,3 +97,38 @@ export const getAllCandidates = async () => {
   });
   return response2.json();
 };
+export const scheduleInterview = async (data) => {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${API_URL}/api/interviews/schedule`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  });
+  return response.json();
+};
+
+export const getMyInterviews = async () => {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${API_URL}/api/interviews/my-interviews`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }
+  });
+  return response.json();
+};
+export const evaluateCandidate = async (data) => {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${API_URL}/api/evaluations`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  });
+  return response.json();
+};

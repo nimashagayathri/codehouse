@@ -37,6 +37,8 @@ function Sidebar({ role }) {
     setIsOpen(false); // Close menu after navigation on mobile
   };
 
+  const handleLogout = () => { localStorage.clear(); navigate('/login'); };
+
   return (
     <>
       {/* Mobile Hamburger Menu */}
@@ -84,7 +86,7 @@ function Sidebar({ role }) {
 
         {/* Logout */}
         <div className="p-4 border-t border-blue-800">
-          <button className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-blue-800 transition duration-200">
+          <button onClick={handleLogout} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-blue-800 transition duration-200">
             <span className="text-xl">🚪</span>
             <span className="font-medium">Logout</span>
           </button>
@@ -112,7 +114,7 @@ function Sidebar({ role }) {
           </nav>
           {/* Logout in mobile menu */}
           <div className="p-4 border-t border-blue-800">
-            <button className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-blue-800 transition duration-200">
+            <button onClick={handleLogout} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-blue-800 transition duration-200">
               <span className="text-xl">🚪</span>
               <span className="font-medium">Logout</span>
             </button>
