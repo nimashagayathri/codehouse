@@ -175,6 +175,52 @@ export const evaluateCandidate = async (data) => {
   return response.json();
 };
 
+export const getAnalyticsSummary = async () => {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${API_URL}/api/analytics/summary`, {
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
+  return response.json();
+};
+
+export const getAllUsers = async (role = '') => {
+  const token = localStorage.getItem('token');
+  const url = role ? `${API_URL}/api/admin/users?role=${role}` : `${API_URL}/api/admin/users`;
+  const response = await fetch(url, {
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
+  return response.json();
+};
+
+export const updateUserStatus = async (userId, isActive) => {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${API_URL}/api/admin/users/${userId}/status`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ isActive })
+  });
+  return response.json();
+};
+
+export const getTopJobs = async () => {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${API_URL}/api/analytics/top-jobs`, {
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
+  return response.json();
+};
+
+export const getHiringTrends = async () => {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${API_URL}/api/analytics/hiring-trends`, {
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
+  return response.json();
+};
+
 export const getJobRecommendations = async () => {
   const token = localStorage.getItem('token');
   const response = await fetch(`${API_URL}/api/applications/recommendations`, {

@@ -1,21 +1,55 @@
+import { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
+import { getAnalyticsSummary, getTopJobs, getHiringTrends } from '../api';
 
 function AdminAnalytics() {
+  const [summary, setSummary] = useState(null);
+  const [hiringTrends, setHiringTrends] = useState([]);
+  const [topJobs, setTopJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      try {
+        const [summaryData, trendsData, jobsData] = await Promise.all([
+          getAnalyticsSummary(),
+          getHiringTrends(),
+          getTopJobs()
+        ]);
+        setSummary(summaryData);
+        setHiringTrends(trendsData);
+        setTopJobs(jobsData);
+      } catch (err) {
+        console.error("Failed to load analytics data", err);
+      }
+      setLoading(false);
+    };
+    fetchAnalytics();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen bg-slate-50">
+        <Sidebar role="admin" />
+        <div className="flex-1 flex justify-center items-center h-screen">
+          <p className="text-slate-500 font-medium text-lg">⏳ Loading System Analytics...</p>
+        </div>
+      </div>
+    );
+  }
+
   const stats = [
-    { label: "Total Users", value: "245", color: "text-blue-700", icon: "👥" },
-    { label: "Active Jobs", value: "48", color: "text-green-600", icon: "💼" },
-    { label: "Applications", value: "312", color: "text-purple-600", icon: "📨" },
-    { label: "Hired", value: "28", color: "text-yellow-600", icon: "🎉" },
+    { label: "Total Candidates", value: summary?.totalCandidates || 0, color: "text-blue-700", icon: "👥" },
+    { label: "Active Jobs", value: summary?.activeJobs || 0, color: "text-green-600", icon: "💼" },
+    { label: "Applications", value: summary?.totalApplications || 0, color: "text-purple-600", icon: "📨" },
+    { label: "Hiring Rate", value: summary?.totalApplications > 0 ? `${Math.round((summary?.hiredApplications / summary?.totalApplications) * 100)}%` : "0%", color: "text-yellow-600", icon: "🎉" },
   ];
 
-  const monthlyData = [
-    { month: "January", applications: 50, hired: 5 },
-    { month: "February", applications: 62, hired: 8 },
-    { month: "March", applications: 78, hired: 10 },
-    { month: "April", applications: 55, hired: 6 },
-    { month: "May", applications: 90, hired: 12 },
-    { month: "June", applications: 72, hired: 9 },
-  ];
+  // Render recent 6 months for table
+  const recentTrends = hiringTrends.slice(0, 6); // Assuming it returns up to 12 months, slice or take what we have
+  const maxJobApps = topJobs.length > 0 ? Math.max(...topJobs.map(j => j.applicationsCount)) : 100;
+
+  const processBarColors = ["bg-blue-500", "bg-purple-500", "bg-green-500", "bg-yellow-500", "bg-red-500"];
 
   return (
     <div className="flex min-h-screen bg-slate-50">
@@ -56,18 +90,20 @@ function AdminAnalytics() {
                 </tr>
               </thead>
               <tbody>
-                {monthlyData.map((row) => (
+                {recentTrends.length > 0 ? recentTrends.map((row) => (
                   <tr key={row.month} className="border-b border-slate-50">
-                    <td className="py-3 text-slate-700 font-medium">{row.month}</td>
-                    <td className="text-slate-500">{row.applications}</td>
-                    <td className="text-slate-500">{row.hired}</td>
+                    <td className="py-3 text-slate-700 font-medium">{row.monthName}</td>
+                    <td className="text-slate-500">{row.applicationsCount}</td>
+                    <td className="text-slate-500">{row.hiredCount}</td>
                     <td>
                       <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
-                        {Math.round((row.hired / row.applications) * 100)}%
+                        {row.applicationsCount > 0 ? Math.round((row.hiredCount / row.applicationsCount) * 100) : 0}%
                       </span>
                     </td>
                   </tr>
-                ))}
+                )) : (
+                  <tr><td colSpan="4" className="py-4 text-center text-slate-400">No data available for this year.</td></tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -77,25 +113,22 @@ function AdminAnalytics() {
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
           <h3 className="text-lg font-bold text-slate-800 mb-6">Top Job Categories 🏆</h3>
           <div className="space-y-4">
-            {[
-              { job: "Software Engineer", count: 85, color: "bg-blue-500" },
-              { job: "Frontend Developer", count: 71, color: "bg-purple-500" },
-              { job: "UI/UX Designer", count: 62, color: "bg-green-500" },
-              { job: "Data Analyst", count: 48, color: "bg-yellow-500" },
-            ].map((item) => (
-              <div key={item.job}>
+            {topJobs.length > 0 ? topJobs.slice(0, 5).map((item, index) => (
+              <div key={item.jobPostingId}>
                 <div className="flex justify-between mb-2">
-                  <span className="text-slate-600 font-medium">{item.job}</span>
-                  <span className="text-slate-400 text-sm">{item.count} applications</span>
+                  <span className="text-slate-600 font-medium">{item.title}</span>
+                  <span className="text-slate-400 text-sm">{item.applicationsCount} applications</span>
                 </div>
                 <div className="w-full bg-slate-100 rounded-full h-3">
                   <div
-                    className={`${item.color} h-3 rounded-full`}
-                    style={{ width: `${(item.count / 85) * 100}%` }}
+                    className={`${processBarColors[index % processBarColors.length]} h-3 rounded-full`}
+                    style={{ width: `${(item.applicationsCount / maxJobApps) * 100}%` }}
                   />
                 </div>
               </div>
-            ))}
+            )) : (
+              <p className="text-slate-400 text-center py-4">No job applications yet.</p>
+            )}
           </div>
         </div>
       </div>
