@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   Home, FolderOpen, Calendar, Search, User, FileText,
   Sparkles, FileEdit, Users, Award,
-  BarChart3, Shield, LogOut, Menu
+  BarChart3, Shield, LogOut, Menu, Activity
 } from 'lucide-react';
 function Sidebar({ role }) {
   const navigate = useNavigate();
@@ -35,7 +35,9 @@ function Sidebar({ role }) {
     admin: [
       { label: 'Dashboard', icon: <Home size={18} />, path: '/admin' },
       { label: 'Users', icon: <Shield size={18} />, path: '/users' },
+      { label: 'Organizations', icon: <FolderOpen size={18} />, path: '/organizations' },
       { label: 'Analytics', icon: <BarChart3 size={18} />, path: '/analytics' },
+      { label: 'Audit Logs', icon: <Activity size={18} />, path: '/audit-logs' },
     ],
   };
 

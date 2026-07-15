@@ -97,10 +97,10 @@ function AIResumeParser() {
 
         {parsed && aiResult && (
           <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 max-w-2xl mx-auto">
-            <h3 className="text-lg font-bold text-slate-800 mb-6">AI Analysis Results âœ¨</h3>
+            <h3 className="text-lg font-bold text-slate-800 mb-6">AI Analysis Results</h3>
 
             <div className="mb-6">
-              <h4 className="font-bold text-slate-600 mb-2">ðŸ‘¤ Personal Info</h4>
+              <h4 className="font-bold text-slate-600 mb-2"> Personal Info</h4>
               <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
                 <p className="text-slate-700"><span className="font-semibold">Name:</span> {aiResult.name}</p>
                 <p className="text-slate-700"><span className="font-semibold">Email:</span> {aiResult.email}</p>
@@ -111,7 +111,7 @@ function AIResumeParser() {
             </div>
 
             <div className="mb-6">
-              <h4 className="font-bold text-slate-600 mb-2">ðŸ› ï¸ Extracted Skills</h4>
+              <h4 className="font-bold text-slate-600 mb-2"> Extracted Skills</h4>
               <div className="flex flex-wrap gap-2">
                 {aiResult.skills?.map((skill) => (
                   <span key={skill} className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-semibold text-sm">
@@ -125,9 +125,9 @@ function AIResumeParser() {
               <p className="text-slate-500 mb-1 font-medium">AI Profile Score</p>
               <p className="text-5xl font-extrabold text-purple-600">{aiResult.score}%</p>
               <p className="text-slate-400 mt-2 text-sm">
-                {aiResult.score >= 80 ? 'ðŸŒŸ Strong profile! Ready to apply.' :
-                  aiResult.score >= 60 ? 'ðŸ‘ Good profile! Some improvements needed.' :
-                    'ðŸ’ª Keep improving your profile!'}
+                {aiResult.score >= 80 ? 'Strong profile! Ready to apply.' :
+                  aiResult.score >= 60 ? 'Good profile! Some improvements needed.' :
+                    'Keep improving your profile!'}
               </p>
             </div>
           </div>

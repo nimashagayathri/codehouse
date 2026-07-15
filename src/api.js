@@ -51,6 +51,11 @@ export const postJob = async (jobData) => {
     },
     body: JSON.stringify(jobData)
   });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`HTTP ${response.status} - ${errorText || 'Empty Response Body'}`);
+  }
   return response.json();
 };
 export const getCandidateProfile = async () => {
@@ -205,6 +210,27 @@ export const updateUserStatus = async (userId, isActive) => {
   return response.json();
 };
 
+export const updateUserRole = async (userId, newRole) => {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${API_URL}/api/admin/users/${userId}/role`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ role: newRole })
+  });
+  return response.json();
+};
+
+export const getAuditLogs = async () => {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${API_URL}/api/admin/audit-logs`, {
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
+  return response.json();
+};
+
 export const getTopJobs = async () => {
   const token = localStorage.getItem('token');
   const response = await fetch(`${API_URL}/api/analytics/top-jobs`, {
@@ -250,6 +276,36 @@ export const getMyApplications = async () => {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     }
+  });
+  return response.json();
+};
+
+export const getOrganizations = async () => {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${API_URL}/api/organizations`, {
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
+  return response.json();
+};
+
+export const createOrganization = async (org) => {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${API_URL}/api/organizations`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(org)
+  });
+  return response.json();
+};
+
+export const deleteOrganization = async (id) => {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${API_URL}/api/organizations/${id}`, {
+    method: 'DELETE',
+    headers: { 'Authorization': `Bearer ${token}` }
   });
   return response.json();
 };
