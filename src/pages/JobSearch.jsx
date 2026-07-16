@@ -32,7 +32,7 @@ function JobSearch() {
         await applyJob(jobId);
         setApplied([...applied, jobId]);
         localStorage.setItem('appliedJobs', JSON.stringify([...applied, jobId]));
-        alert('Application Submitted! ✅');
+        alert('Application Submitted! ');
       } catch (err) {
         alert('Failed to apply!');
       }
@@ -50,7 +50,7 @@ function JobSearch() {
 
       <div className="flex-1 p-8">
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-slate-800">Find Jobs 🔍</h2>
+          <h2 className="text-2xl font-bold text-slate-800">Find Jobs </h2>
           <p className="text-slate-400 mt-1">Discover job opportunities for you.</p>
         </div>
 
@@ -70,7 +70,7 @@ function JobSearch() {
 
         {/* Job Cards */}
         {loading ? (
-          <div className="text-center text-slate-400 py-12">⏳ Loading jobs...</div>
+          <div className="text-center text-slate-400 py-12"> Loading jobs...</div>
         ) : filteredJobs.length === 0 ? (
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 text-center text-slate-400">
             No jobs found!
@@ -86,7 +86,7 @@ function JobSearch() {
                     <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">{job.employmentType || 'Full Time'}</span>
                     <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">LKR {job.salary?.toLocaleString()}</span>
                     {job.requiredSkills && (
-                      <span className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-semibold">🛠️ {job.requiredSkills}</span>
+                      <span className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-semibold">️ {job.requiredSkills}</span>
                     )}
                   </div>
                 </div>
@@ -98,7 +98,7 @@ function JobSearch() {
                       : 'bg-blue-700 hover:bg-blue-800'
                   }`}
                 >
-                  {applied.includes(job.id) ? 'Applied ✅' : 'Apply Now'}
+                  {applied.includes(job.id) ? 'Applied ' : 'Apply Now'}
                 </button>
               </div>
             ))}
