@@ -46,6 +46,17 @@ function InterviewSchedule() {
     return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&location=${location}&dates=${formatGoogleDate(date)}/${formatGoogleDate(endDate)}`;
   };
 
+  const generateOutlookCalendarUrl = (interview) => {
+    const title = encodeURIComponent(`Interview for ${interview.jobTitle} at CodeHouse`);
+    const details = encodeURIComponent(`Candidate: ${interview.candidateName}\nMode: ${interview.mode}\nNotes: ${interview.notes || 'None'}`);
+    const location = encodeURIComponent(interview.meetingLink || interview.location || 'TBA');
+
+    const date = new Date(interview.scheduledAt || interview.createdAt);
+    const endDate = new Date(date.getTime() + 60 * 60 * 1000); // 1 hour
+
+    return `https://outlook.live.com/calendar/0/deeplink/compose?path=/calendar/action/compose&rru=addevent&subject=${title}&startdt=${date.toISOString().replace(/.\d{3}Z$/, 'Z')}&enddt=${endDate.toISOString().replace(/.\d{3}Z$/, 'Z')}&body=${details}&location=${location}`;
+  };
+
   const handleSchedule = async () => {
     if (form.jobApplicationId && form.scheduledAt && form.mode) {
       try {
@@ -84,7 +95,7 @@ function InterviewSchedule() {
 
         {added && (
           <div className="bg-green-50 border border-green-200 text-green-700 p-4 rounded-2xl mb-6 font-medium">
-             Interview Scheduled Successfully!
+            Interview Scheduled Successfully!
           </div>
         )}
 
@@ -127,7 +138,7 @@ function InterviewSchedule() {
           </div>
           <button onClick={handleSchedule}
             className="mt-4 bg-blue-700 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-800 transition">
-            Schedule Interview →
+            Schedule Interview 
           </button>
         </div>
 
@@ -166,13 +177,20 @@ function InterviewSchedule() {
                           {interview.status}
                         </span>
                       </td>
-                      <td>
+                      <td className="flex gap-2">
                         <a
                           href={generateGoogleCalendarUrl(interview)}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="bg-slate-100 text-slate-600 hover:bg-blue-100 hover:text-blue-700 px-3 py-1 rounded-xl text-xs font-bold transition">
-                           Add to Calendar
+                          Google
+                        </a>
+                        <a
+                          href={generateOutlookCalendarUrl(interview)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="bg-slate-100 text-slate-600 hover:bg-blue-100 hover:text-blue-700 px-3 py-1 rounded-xl text-xs font-bold transition">
+                          Outlook
                         </a>
                       </td>
                     </tr>
