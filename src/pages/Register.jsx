@@ -92,7 +92,7 @@ function Register() {
 
           <button onClick={handleRegister} disabled={loading}
             className="w-full bg-blue-700 hover:bg-blue-800 text-white p-3 rounded-xl font-bold transition duration-300">
-            {loading ? ' Creating account...' : 'Register →'}
+            {loading ? ' Creating account...' : 'Register '}
           </button>
 
           <p className="text-center text-gray-400 mt-4 text-sm">
