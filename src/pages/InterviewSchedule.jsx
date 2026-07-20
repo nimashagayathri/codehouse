@@ -1,28 +1,74 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
+import { scheduleInterview, getMyInterviews } from '../api';
 
 function InterviewSchedule() {
-  const [interviews, setInterviews] = useState([
-    { id: 1, candidate: "Kasun Perera", job: "Software Engineer", date: "2026-07-01", time: "10:00 AM", type: "Online", status: "Confirmed" },
-    { id: 2, candidate: "Saman Silva", job: "UI/UX Designer", date: "2026-07-03", time: "02:00 PM", type: "On-site", status: "Pending" },
-    { id: 3, candidate: "Dilani Fernando", job: "Frontend Developer", date: "2026-07-05", time: "11:00 AM", type: "Online", status: "Confirmed" },
-  ]);
-
-  const [form, setForm] = useState({ candidate: '', job: '', date: '', time: '', type: '' });
+  const [interviews, setInterviews] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [form, setForm] = useState({
+    jobApplicationId: '',
+    scheduledAt: '',
+    mode: '',
+    location: '',
+    notes: ''
+  });
   const [added, setAdded] = useState(false);
+
+  useEffect(() => {
+    const fetchInterviews = async () => {
+      try {
+        const data = await getMyInterviews();
+        if (Array.isArray(data)) {
+          setInterviews(data);
+        }
+      } catch (err) {
+        console.error('Error fetching interviews:', err);
+      }
+      setLoading(false);
+    };
+    fetchInterviews();
+  }, []);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSchedule = () => {
-    if (form.candidate && form.job && form.date && form.time && form.type) {
-      setInterviews([...interviews, { id: interviews.length + 1, ...form, status: "Pending" }]);
-      setForm({ candidate: '', job: '', date: '', time: '', type: '' });
-      setAdded(true);
-      setTimeout(() => setAdded(false), 3000);
+  const generateGoogleCalendarUrl = (interview) => {
+    const title = encodeURIComponent(`Interview for ${interview.jobTitle} at CodeHouse`);
+    const details = encodeURIComponent(`Candidate: ${interview.candidateName}\nMode: ${interview.mode}\nNotes: ${interview.notes || 'None'}`);
+    const location = encodeURIComponent(interview.meetingLink || interview.location || 'TBA');
+
+    const date = new Date(interview.scheduledAt || interview.createdAt);
+    const endDate = new Date(date.getTime() + 60 * 60 * 1000); // 1 hour
+
+    const formatGoogleDate = (d) => d.toISOString().replace(/-|:|\.\d\d\d/g, "");
+
+    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&location=${location}&dates=${formatGoogleDate(date)}/${formatGoogleDate(endDate)}`;
+  };
+
+  const handleSchedule = async () => {
+    if (form.jobApplicationId && form.scheduledAt && form.mode) {
+      try {
+        const data = await scheduleInterview({
+          jobApplicationId: parseInt(form.jobApplicationId),
+          scheduledAt: form.scheduledAt,
+          mode: form.mode,
+          location: form.location,
+          notes: form.notes
+        });
+        if (data.interview) {
+          setInterviews([...interviews, data.interview]);
+          setForm({ jobApplicationId: '', scheduledAt: '', mode: '', location: '', notes: '' });
+          setAdded(true);
+          setTimeout(() => setAdded(false), 3000);
+        } else {
+          alert(data.message || 'Failed to schedule!');
+        }
+      } catch (err) {
+        alert('Connection failed!');
+      }
     } else {
-      alert('Please fill all fields!');
+      alert('Please fill all required fields!');
     }
   };
 
@@ -32,13 +78,13 @@ function InterviewSchedule() {
 
       <div className="flex-1 p-8">
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-slate-800">Interview Schedule 📅</h2>
+          <h2 className="text-2xl font-bold text-slate-800">Interview Schedule </h2>
           <p className="text-slate-400 mt-1">Schedule and manage candidate interviews.</p>
         </div>
 
         {added && (
           <div className="bg-green-50 border border-green-200 text-green-700 p-4 rounded-2xl mb-6 font-medium">
-            ✅ Interview Scheduled Successfully!
+             Interview Scheduled Successfully!
           </div>
         )}
 
@@ -47,35 +93,36 @@ function InterviewSchedule() {
           <h3 className="text-lg font-bold text-slate-800 mb-4">Schedule New Interview</h3>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-slate-600 mb-2 text-sm font-semibold">Candidate Name</label>
-              <input type="text" name="candidate" value={form.candidate} onChange={handleChange}
-                placeholder="e.g. Kasun Perera"
-                className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition"/>
+              <label className="block text-slate-600 mb-2 text-sm font-semibold">Application ID</label>
+              <input type="number" name="jobApplicationId" value={form.jobApplicationId} onChange={handleChange}
+                placeholder="e.g. 1"
+                className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition" />
             </div>
             <div>
-              <label className="block text-slate-600 mb-2 text-sm font-semibold">Job Position</label>
-              <input type="text" name="job" value={form.job} onChange={handleChange}
-                placeholder="e.g. Software Engineer"
-                className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition"/>
+              <label className="block text-slate-600 mb-2 text-sm font-semibold">Date & Time</label>
+              <input type="datetime-local" name="scheduledAt" value={form.scheduledAt} onChange={handleChange}
+                className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition" />
             </div>
             <div>
-              <label className="block text-slate-600 mb-2 text-sm font-semibold">Date</label>
-              <input type="date" name="date" value={form.date} onChange={handleChange}
-                className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition"/>
-            </div>
-            <div>
-              <label className="block text-slate-600 mb-2 text-sm font-semibold">Time</label>
-              <input type="time" name="time" value={form.time} onChange={handleChange}
-                className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition"/>
-            </div>
-            <div>
-              <label className="block text-slate-600 mb-2 text-sm font-semibold">Interview Type</label>
-              <select name="type" value={form.type} onChange={handleChange}
+              <label className="block text-slate-600 mb-2 text-sm font-semibold">Interview Mode</label>
+              <select name="mode" value={form.mode} onChange={handleChange}
                 className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition">
-                <option value="">Select Type</option>
+                <option value="">Select Mode</option>
                 <option value="Online">Online</option>
-                <option value="On-site">On-site</option>
+                <option value="OnSite">On-site</option>
               </select>
+            </div>
+            <div>
+              <label className="block text-slate-600 mb-2 text-sm font-semibold">Location / Link</label>
+              <input type="text" name="location" value={form.location} onChange={handleChange}
+                placeholder="e.g. Google Meet / Office"
+                className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition" />
+            </div>
+            <div className="col-span-2">
+              <label className="block text-slate-600 mb-2 text-sm font-semibold">Notes</label>
+              <input type="text" name="notes" value={form.notes} onChange={handleChange}
+                placeholder="e.g. Please join on time"
+                className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition" />
             </div>
           </div>
           <button onClick={handleSchedule}
@@ -90,38 +137,49 @@ function InterviewSchedule() {
             <h3 className="text-lg font-bold text-slate-800">Upcoming Interviews</h3>
           </div>
           <div className="p-6">
-            <table className="w-full text-left">
-              <thead>
-                <tr className="border-b border-slate-100">
-                  <th className="pb-3 text-slate-400 font-medium text-sm">Candidate</th>
-                  <th className="pb-3 text-slate-400 font-medium text-sm">Job</th>
-                  <th className="pb-3 text-slate-400 font-medium text-sm">Date</th>
-                  <th className="pb-3 text-slate-400 font-medium text-sm">Time</th>
-                  <th className="pb-3 text-slate-400 font-medium text-sm">Type</th>
-                  <th className="pb-3 text-slate-400 font-medium text-sm">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {interviews.map((interview) => (
-                  <tr key={interview.id} className="border-b border-slate-50">
-                    <td className="py-3 text-slate-700 font-medium">{interview.candidate}</td>
-                    <td className="text-slate-500">{interview.job}</td>
-                    <td className="text-slate-500">{interview.date}</td>
-                    <td className="text-slate-500">{interview.time}</td>
-                    <td><span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">{interview.type}</span></td>
-                    <td>
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        interview.status === "Confirmed"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-yellow-100 text-yellow-700"
-                      }`}>
-                        {interview.status}
-                      </span>
-                    </td>
+            {loading ? (
+              <p className="text-center text-slate-400"> Loading interviews...</p>
+            ) : interviews.length === 0 ? (
+              <p className="text-center text-slate-400">No interviews scheduled!</p>
+            ) : (
+              <table className="w-full text-left">
+                <thead>
+                  <tr className="border-b border-slate-100">
+                    <th className="pb-3 text-slate-400 font-medium text-sm">Candidate</th>
+                    <th className="pb-3 text-slate-400 font-medium text-sm">Job</th>
+                    <th className="pb-3 text-slate-400 font-medium text-sm">Date</th>
+                    <th className="pb-3 text-slate-400 font-medium text-sm">Mode</th>
+                    <th className="pb-3 text-slate-400 font-medium text-sm">Status</th>
+                    <th className="pb-3 text-slate-400 font-medium text-sm">Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {interviews.map((interview) => (
+                    <tr key={interview.id} className="border-b border-slate-50">
+                      <td className="py-3 text-slate-700 font-medium">{interview.candidateName}</td>
+                      <td className="text-slate-500">{interview.jobTitle}</td>
+                      <td className="text-slate-500">{new Date(interview.scheduledAt || interview.createdAt).toLocaleDateString()}</td>
+                      <td><span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">{interview.mode}</span></td>
+                      <td>
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${interview.status === "Scheduled" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
+                          }`}>
+                          {interview.status}
+                        </span>
+                      </td>
+                      <td>
+                        <a
+                          href={generateGoogleCalendarUrl(interview)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="bg-slate-100 text-slate-600 hover:bg-blue-100 hover:text-blue-700 px-3 py-1 rounded-xl text-xs font-bold transition">
+                           Add to Calendar
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
       </div>
