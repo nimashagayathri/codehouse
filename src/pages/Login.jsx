@@ -149,25 +149,7 @@ function Login() {
             </button>
           )}
 
-          <div className="flex items-center gap-3 my-5">
-            <div className="flex-1 h-px bg-slate-200"></div>
-            <span className="text-slate-400 text-xs font-semibold">OR</span>
-            <div className="flex-1 h-px bg-slate-200"></div>
-          </div>
 
-          {/* ===== Google Sign In Mockup Button ===== */}
-          <button
-            type="button"
-            onClick={() => alert("Google Sign-In is coming soon!")}
-            className="w-full bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 p-3 rounded-xl font-bold transition duration-300 shadow-sm flex items-center justify-center gap-3 mb-6"
-          >
-            <img
-              src="https://www.svgrepo.com/show/475656/google-color.svg"
-              alt="Google"
-              className="h-5 w-5"
-            />
-            Sign in with Google
-          </button>
           <p className="text-center text-slate-500 text-sm">
             Don't have an account?{' '}
             <a href="/register" className="text-blue-700 font-semibold hover:text-blue-800 transition">Register here</a>
