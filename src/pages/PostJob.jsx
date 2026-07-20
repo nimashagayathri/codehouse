@@ -32,7 +32,7 @@ function PostJob() {
           setForm({ title: '', company: '', location: '', type: '', salary: '', skills: '', description: '' });
         }
       } catch (err) {
-        alert('Failed to post job. Please try again.');
+        alert('Failed to post job. Please try again.\nDetails: ' + err.message);
       }
       setLoading(false);
     } else {
@@ -51,8 +51,9 @@ function PostJob() {
         </div>
 
         {posted && (
-          <div className="bg-green-50 border border-green-200 text-green-700 p-4 rounded-2xl mb-6 font-medium">
-             Job Posted Successfully!
+          <div className="fixed top-6 right-6 z-50 bg-green-500 text-white p-4 rounded-xl shadow-xl flex items-center gap-3 animate-bounce">
+            <span className="text-xl">✅</span>
+            <span className="font-bold">Job Posted Successfully!</span>
           </div>
         )}
 
@@ -113,7 +114,7 @@ function PostJob() {
 
           <button onClick={handlePost}
             className="w-full bg-blue-700 text-white p-3 rounded-xl font-bold hover:bg-blue-800 transition duration-300">
-            Post Job →
+            Post Job
           </button>
         </div>
       </div>
