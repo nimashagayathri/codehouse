@@ -17,6 +17,24 @@ export const registerUser = async (data) => {
   });
   return response.json();
 };
+
+export const forgotPassword = async (email) => {
+  const response = await fetch(`${API_URL}/api/auth/forgot-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email })
+  });
+  return response.json();
+};
+
+export const resetPassword = async (token, newPassword) => {
+  const response = await fetch(`${API_URL}/api/auth/reset-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token, newPassword })
+  });
+  return response.json();
+};
 export const getJobs = async () => {
   const token = localStorage.getItem('token');
   const response = await fetch(`${API_URL}/api/jobs`, {
@@ -98,6 +116,19 @@ export const updateCandidateProfile = async (profileData) => {
     });
   }
 
+  return response.json();
+};
+
+export const uploadResume = async (formData) => {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${API_URL}/api/candidates/upload-resume`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`
+      // Note: Do not set Content-Type for FormData, fetch does it automatically with boundary
+    },
+    body: formData
+  });
   return response.json();
 };
 
