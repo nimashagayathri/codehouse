@@ -27,7 +27,8 @@ function Landing() {
                     </button>
                     <button
                         onClick={() => navigate('/register')}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-full font-bold text-sm transition shadow-lg shadow-blue-200 flex items-center gap-2"
+                        className="text-white px-6 py-2.5 rounded-full font-bold text-sm transition shadow-lg flex items-center gap-2"
+                        style={{ backgroundColor: '#0c37adff' }}
                     >
                         Get Started <ArrowRight size={16} />
                     </button>
@@ -36,12 +37,12 @@ function Landing() {
 
             {/* Hero Section */}
             <section className="container mx-auto px-6 pt-8 pb-16 text-center max-w-4xl">
-                <div className="inline-block bg-blue-50 border border-blue-100 text-blue-700 px-4 py-1.5 rounded-full text-xs font-bold mb-6 uppercase tracking-wider">
+                <div className="inline-block px-4 py-1.5 rounded-full text-xs font-bold mb-6 uppercase tracking-wider text-white" style={{ backgroundColor: '#0c37adff' }}>
                     Next-Gen AI Recruitment
                 </div>
                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 mb-4 leading-tight">
                     Find exceptional talent,<br />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">powered by Intelligence.</span>
+                    <span style={{ color: '#0c37adff' }}>powered by Intelligence.</span>
                 </h1>
                 <p className="text-lg md:text-xl text-slate-500 mb-8 max-w-2xl mx-auto leading-relaxed">
                     CodeHouse revolutionizes the hiring process by automating resume parsing, skill matching, and candidate ranking using deeply integrated AI capabilities.
@@ -66,7 +67,7 @@ function Landing() {
             {/* Stats Section */}
             <section className="bg-white border-y border-slate-200 py-16 mt-12">
                 <div className="container mx-auto px-6">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-slate-100">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-slate-400">
                         <div>
                             <p className="text-4xl font-black text-slate-900 uppercase">99%</p>
                             <p className="text-sm font-semibold text-slate-500 mt-2">AI Match Accuracy</p>
