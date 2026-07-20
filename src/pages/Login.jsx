@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { loginUser } from '../api';
+import { loginUser, forgotPassword } from '../api';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -8,7 +8,26 @@ function Login() {
   const [showHint, setShowHint] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [forgotMode, setForgotMode] = useState(false);
+  const [message, setMessage] = useState('');
   const navigate = useNavigate();
+
+  const handleForgotPassword = async () => {
+    if (!email) {
+      setError('Please enter your email address to reset password.');
+      return;
+    }
+    setLoading(true);
+    setError('');
+    setMessage('');
+    try {
+      const data = await forgotPassword(email);
+      setMessage(data.message || 'If this email exists, a reset link will be sent.');
+    } catch (err) {
+      setError('Connection failed. Make sure backend is running.');
+    }
+    setLoading(false);
+  };
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -44,23 +63,20 @@ function Login() {
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
 
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-800 rounded-2xl mb-4 shadow-lg">
-            <span className="text-3xl">🎯</span>
+        <div className="text-center mb-6 mt-2">
+          <div className="h-20 flex items-center justify-center overflow-visible mb-2">
+            <img src="/logo.png" alt="CodeHouse" className="h-48 md:h-64 object-contain transform scale-[1.5]" />
           </div>
-          <h1 className="text-4xl font-extrabold text-slate-800 tracking-tight">
-            Code<span className="text-blue-700">House</span>
-          </h1>
-          <p className="text-slate-400 mt-2 text-sm">AI-Powered Recruitment Platform</p>
+          <p className="text-slate-500 mt-2 text-sm font-semibold uppercase tracking-widest">AI Recruitment Platform</p>
         </div>
 
-        <div className="bg-white p-8 rounded-2xl shadow-lg border border-slate-200">
-          <h2 className="text-xl font-bold text-slate-800 mb-1">Welcome back 👋</h2>
+        <div className="bg-white p-8 rounded-3xl shadow-xl shadow-blue-900/5 border border-slate-100">
+          <h2 className="text-2xl font-bold text-slate-800 mb-2">Welcome back</h2>
           <p className="text-slate-400 text-sm mb-6">Sign in to continue to Code House</p>
 
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-600 p-3 rounded-xl mb-4 text-sm">
-              ⚠️ {error}
+              ️ {error}
             </div>
           )}
 
@@ -75,25 +91,60 @@ function Login() {
             />
           </div>
 
-          <div className="mb-6">
-            <label className="block text-slate-600 mb-2 text-sm font-semibold">Password</label>
+          <div className="flex justify-between items-center mb-6">
+            <label className="block text-slate-600 text-sm font-semibold">Password</label>
+            {!forgotMode && (
+              <button
+                onClick={() => { setForgotMode(true); setError(''); setMessage(''); }}
+                className="text-xs text-blue-600 font-bold hover:text-blue-700"
+              >
+                Forgot Password?
+              </button>
+            )}
+          </div>
+
+          {!forgotMode && (
             <input
               type="password"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
-              className="w-full border-2 border-slate-200 text-slate-800 p-3 rounded-xl focus:outline-none focus:border-blue-600 transition placeholder-slate-300"
+              className="w-full border-2 border-slate-200 text-slate-800 p-3 rounded-xl focus:outline-none focus:border-blue-600 transition placeholder-slate-300 mb-6"
             />
-          </div>
+          )}
 
-          <button
-            onClick={handleLogin}
-            disabled={loading}
-            className="w-full bg-blue-800 hover:bg-blue-900 text-white p-3 rounded-xl font-bold transition duration-300 shadow-md"
-          >
-            {loading ? '⏳ Signing in...' : 'Sign In '}
-          </button>
+          {message && (
+            <div className="bg-green-50 border border-green-200 text-green-700 p-3 rounded-xl mb-6 text-sm font-bold text-center">
+              {message}
+            </div>
+          )}
+
+          {forgotMode ? (
+            <div className="space-y-3">
+              <button
+                onClick={handleForgotPassword}
+                disabled={loading}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-xl font-bold transition duration-300 shadow-md disabled:opacity-50"
+              >
+                {loading ? ' Sending...' : 'Send Reset Link 📧'}
+              </button>
+              <button
+                onClick={() => { setForgotMode(false); setError(''); setMessage(''); }}
+                className="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 p-3 rounded-xl font-bold transition duration-300"
+              >
+                Back to Login
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={handleLogin}
+              disabled={loading}
+              className="w-full bg-blue-800 hover:bg-blue-900 text-white p-3 rounded-xl font-bold transition duration-300 shadow-md"
+            >
+              {loading ? ' Signing in...' : 'Sign In '}
+            </button>
+          )}
 
           <div className="flex items-center gap-3 my-5">
             <div className="flex-1 h-px bg-slate-200"></div>
@@ -132,3 +183,6 @@ function Login() {
 }
 
 export default Login;
+
+      
+      
