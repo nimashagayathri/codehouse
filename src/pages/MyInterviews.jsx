@@ -96,7 +96,7 @@ function MyInterviews() {
                                             rel="noopener noreferrer"
                                             className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl font-bold transition duration-200 text-sm"
                                         >
-                                             Add to Google Calendar
+                                            Add to Google Calendar
                                         </a>
                                     </div>
                                 ))}
