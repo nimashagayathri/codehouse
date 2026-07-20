@@ -93,6 +93,17 @@ function Login() {
 
           <div className="mb-2">
             <label className="block text-slate-600 text-sm font-semibold">Password</label>
+<<<<<<< Updated upstream
+=======
+            {!forgotMode && (
+              <button
+                onClick={() => { setForgotMode(true); setError(''); setMessage(''); }}
+                className="text-xs text-blue-600 font-bold hover:text-blue-700 transition"
+              >
+                Forgot Password?
+              </button>
+            )}
+>>>>>>> Stashed changes
           </div>
 
           {!forgotMode && (
@@ -148,19 +159,43 @@ function Login() {
             </button>
           )}
 
+<<<<<<< Updated upstream
+=======
+          <div className="flex items-center gap-3 my-5">
+            <div className="flex-1 h-px bg-slate-200"></div>
+            <span className="text-slate-400 text-xs font-semibold">OR</span>
+            <div className="flex-1 h-px bg-slate-200"></div>
+          </div>
+
+          {/* ===== Google Sign In Mockup Button ===== */}
+          <button
+            type="button"
+            onClick={() => alert("Google Sign-In is coming soon!")}
+            className="w-full bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 p-3 rounded-xl font-bold transition duration-300 shadow-sm flex items-center justify-center gap-3 mb-6"
+          >
+            <img 
+              src="https://www.svgrepo.com/show/475656/google-color.svg" 
+              alt="Google" 
+              className="h-5 w-5" 
+            />
+            Sign in with Google
+          </button>
+
+>>>>>>> Stashed changes
           <p className="text-center text-slate-500 text-sm">
             Don't have an account?{' '}
-            <a href="/register" className="text-blue-700 font-semibold hover:text-blue-800">Register here</a>
+            <a href="/register" className="text-blue-700 font-semibold hover:text-blue-800 transition">Register here</a>
           </p>
 
           <p
             onClick={() => setShowHint(!showHint)}
-            className="text-center text-slate-300 mt-4 text-xs cursor-pointer hover:text-slate-400"
+            className="text-center text-slate-300 mt-4 text-xs cursor-pointer hover:text-slate-400 transition"
           >
             Need help signing in?
           </p>
+
           {showHint && (
-            <div className="bg-blue-50 border border-blue-100 p-3 rounded-xl mt-3 text-xs text-slate-500">
+            <div className="bg-blue-50 border border-blue-100 p-3 rounded-xl mt-3 text-xs text-slate-500 transform transition-all duration-300">
               <p className="font-bold mb-2 text-blue-700">Demo Accounts:</p>
               <p>jobseeker@gmail.com / 123456</p>
               <p>recruiter@gmail.com / 123456</p>
@@ -170,8 +205,8 @@ function Login() {
           )}
         </div>
 
-        <p className="text-center text-slate-400 mt-6 text-xs">
-          © 2026 Code House. All rights reserved.
+        <p className="text-center text-slate-400 mt-6 text-xs font-medium">
+          © 2026 CodeHouse Technologies. All rights reserved.
         </p>
       </div>
     </div>
