@@ -6,7 +6,7 @@ const GROQ_API_KEY = process.env.REACT_APP_GROQ_API_KEY;
 function AiChatbot() {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState([
-        { role: 'assistant', content: 'Hi there! 👋 I am the CodeHouse AI Assistant. How can I help you today?' }
+        { role: 'assistant', content: 'Hi there!  I am the CodeHouse AI Assistant. How can I help you today?' }
     ]);
     const [inputValue, setInputValue] = useState('');
     const [loading, setLoading] = useState(false);
