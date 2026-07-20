@@ -1,5 +1,6 @@
 ﻿import { useState } from 'react';
 import Sidebar from '../components/Sidebar';
+import { uploadResume } from '../api';
 
 const GROQ_API_KEY = process.env.REACT_APP_GROQ_API_KEY;
 
@@ -67,6 +68,36 @@ function AIResumeParser() {
     setLoading(false);
   };
 
+  const [uploadingPdf, setUploadingPdf] = useState(false);
+
+  const handlePdfUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.type !== 'application/pdf') {
+      alert('Please upload a valid PDF file.');
+      return;
+    }
+
+    setUploadingPdf(true);
+    const formData = new FormData();
+    formData.append('File', file);
+
+    try {
+      const data = await uploadResume(formData);
+      if (data.extractedText) {
+        setResumeText(data.extractedText);
+        alert('PDF text extracted! You can now analyze it.');
+      } else {
+        alert(data.message || 'PDF could not be parsed or was empty.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Failed to upload and parse PDF: ' + err.message);
+    }
+    setUploadingPdf(false);
+  };
+
   return (
     <div className="flex min-h-screen bg-slate-50">
       <Sidebar role="jobseeker" />
@@ -78,18 +109,28 @@ function AIResumeParser() {
         </div>
 
         <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 mb-6 max-w-2xl mx-auto">
-          <h3 className="text-lg font-bold text-slate-800 mb-4">Paste Your Resume Text</h3>
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-bold text-slate-800">Paste Your Resume Text</h3>
+
+            <div className="relative">
+              <input type="file" accept="application/pdf" id="pdf-upload" className="hidden" onChange={handlePdfUpload} />
+              <label htmlFor="pdf-upload" className="cursor-pointer bg-slate-100 text-slate-700 px-4 py-2 rounded-lg font-bold text-sm border border-slate-300 hover:bg-slate-200 transition">
+                {uploadingPdf ? 'Uploading...' : ' Upload PDF'}
+              </label>
+            </div>
+          </div>
+
           <textarea
             rows="8"
-            placeholder="Paste your resume text here..."
+            placeholder="Paste your resume text here, or upload a PDF above..."
             value={resumeText}
             onChange={(e) => setResumeText(e.target.value)}
             className="w-full border-2 border-slate-200 p-3 rounded-xl focus:outline-none focus:border-blue-500 transition mb-4"
           />
           <button
             onClick={handleParse}
-            disabled={loading}
-            className="w-full bg-purple-600 text-white p-3 rounded-xl font-bold hover:bg-purple-700 transition duration-300"
+            disabled={loading || uploadingPdf}
+            className="w-full bg-purple-600 text-white p-3 rounded-xl font-bold hover:bg-purple-700 transition duration-300 disabled:opacity-50"
           >
             {loading ? ' Analyzing with Groq AI...' : ' Analyze with Groq AI'}
           </button>

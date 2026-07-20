@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
-import { getAllUsers, updateUserStatus } from '../api';
+import { getAllUsers, updateUserStatus, updateUserRole } from '../api';
 
 function AdminUsers() {
   const [users, setUsers] = useState([]);
@@ -30,12 +30,24 @@ function AdminUsers() {
     try {
       const newStatus = !currentStatus;
       await updateUserStatus(id, newStatus);
-      // Update local state instead of refetching to be snappy
       setUsers(users.map((user) =>
         user.id === id ? { ...user, isActive: newStatus } : user
       ));
     } catch (err) {
       alert('Failed to update status');
+    }
+  };
+
+  const toggleRole = async (id, newRole) => {
+    try {
+      const res = await updateUserRole(id, newRole);
+      if (res.message) {
+        setUsers(users.map((user) =>
+          user.id === id ? { ...user, role: newRole } : user
+        ));
+      }
+    } catch (err) {
+      alert('Failed to update role');
     }
   };
 
@@ -108,9 +120,16 @@ function AdminUsers() {
                       </td>
                       <td className="text-slate-500 font-medium">{user?.email || 'No Email'}</td>
                       <td>
-                        <span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-semibold">
-                          {user?.role || 'User'}
-                        </span>
+                        <select
+                          value={user?.role || ''}
+                          onChange={(e) => toggleRole(user?.id, e.target.value)}
+                          className="px-3 py-1 bg-slate-100 text-slate-800 border border-slate-300 rounded-lg text-xs font-semibold focus:outline-none focus:border-blue-500"
+                        >
+                          <option value="Candidate">Candidate</option>
+                          <option value="Recruiter">Recruiter</option>
+                          <option value="HiringManager">Hiring Manager</option>
+                          <option value="Admin">Admin</option>
+                        </select>
                       </td>
                       <td>
                         <span className={`px-3 py-1 rounded-full text-xs font-semibold ${user?.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
