@@ -8,7 +8,7 @@ function JobSeekerDashboard() {
       <div className="flex-1 p-4 md:p-8 pt-20 md:pt-0">
         {/* Header */}
         <div className="mb-8">
-          <h2 className="text-xl md:text-2xl font-bold text-slate-800">Welcome, Nimasha! </h2>
+          <h2 className="text-xl md:text-2xl font-bold text-slate-800">Welcome! </h2>
           <p className="text-sm md:text-base text-slate-400 mt-1">Here's what's happening with your job search today.</p>
         </div>
 
