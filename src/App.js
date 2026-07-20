@@ -21,6 +21,7 @@ import MyApplications from './pages/MyApplications';
 import MyInterviews from './pages/MyInterviews';
 import Landing from './pages/Landing';
 import AiChatbot from './components/AiChatbot';
+import ResetPassword from './pages/ResetPassword';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/jobseeker" element={<JobSeekerDashboard />} />
         <Route path="/recruiter" element={<RecruiterDashboard />} />
         <Route path="/hiring-manager" element={<HiringManagerDashboard />} />
