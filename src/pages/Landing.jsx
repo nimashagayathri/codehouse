@@ -127,6 +127,36 @@ function Landing() {
                 </div>
             </section>
 
+            {/* Solutions Section */}
+            <section className="bg-blue-50 py-24" id="solutions">
+                <div className="container mx-auto px-6 text-center max-w-4xl">
+                    <h2 className="text-3xl font-bold text-slate-900 mb-6">Comprehensive Recruitment Solutions</h2>
+                    <p className="text-slate-600 text-lg mb-12">Whether you are a fast-growing startup or an established corporation, CodeHouse adapts to your hiring needs with custom workflows and seamless automation.</p>
+                    <div className="flex flex-col md:flex-row gap-6 justify-center">
+                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-blue-100 flex-1">
+                            <h4 className="font-bold text-blue-700 text-xl mb-2">For Recruiters</h4>
+                            <p className="text-slate-500 text-sm">Post jobs and manage candidates effortlessly in one centralized hub.</p>
+                        </div>
+                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-blue-100 flex-1">
+                            <h4 className="font-bold text-blue-700 text-xl mb-2">For Hiring Managers</h4>
+                            <p className="text-slate-500 text-sm">Evaluate top AI-ranked talent and automatically schedule interviews.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Enterprise Section */}
+            <section className="container mx-auto px-6 py-24 text-center" id="enterprise">
+                <h2 className="text-3xl font-bold text-slate-900 mb-6">Trusted by Forward-Thinking Enterprises</h2>
+                <p className="text-slate-500 text-lg mb-12 max-w-2xl mx-auto">Join the next generation of companies utilizing our proprietary Llama-3 AI infrastructure to cut hiring costs by up to 40%.</p>
+                <div className="flex flex-wrap justify-center gap-8 opacity-60">
+                    <div className="text-2xl font-black text-slate-400 tracking-widest uppercase">Acme Corp</div>
+                    <div className="text-2xl font-black text-slate-400 tracking-widest uppercase">Globex</div>
+                    <div className="text-2xl font-black text-slate-400 tracking-widest uppercase">Initech</div>
+                    <div className="text-2xl font-black text-slate-400 tracking-widest uppercase">Stark Ind.</div>
+                </div>
+            </section>
+
             {/* Footer */}
             <footer className="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
                 <div className="container mx-auto px-6 text-center">
