@@ -113,7 +113,7 @@ function PostJob() {
 
           <button onClick={handlePost}
             className="w-full bg-blue-700 text-white p-3 rounded-xl font-bold hover:bg-blue-800 transition duration-300">
-            Post Job →
+            Post Job 
           </button>
         </div>
       </div>
