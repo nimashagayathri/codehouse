@@ -2,7 +2,7 @@
 import Sidebar from '../components/Sidebar';
 import { uploadResume } from '../api';
 
-const GROQ_API_KEY = process.env.REACT_APP_GROQ_API_KEY;
+const GROQ_API_KEY = "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";
 
 function AIResumeParser() {
   const [parsed, setParsed] = useState(false);

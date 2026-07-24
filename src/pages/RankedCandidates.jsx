@@ -86,7 +86,7 @@ function RankedCandidates() {
     const [qLoading, setQLoading] = useState({});
 
     const handleGenerateQuestions = async (candidateId, skills, jobTitle) => {
-        const GROQ_API_KEY = process.env.REACT_APP_GROQ_API_KEY;
+        const GROQ_API_KEY = "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";
         if (!GROQ_API_KEY) {
             alert('Groq API Key is missing.');
             return;
@@ -237,7 +237,7 @@ function RankedCandidates() {
                                             onClick={() => handleGenerateQuestions(candidate.candidateProfileId, candidate.candidateSkills, jobs.find(j => j.id == selectedJob)?.title)}
                                             className="text-sm font-semibold text-purple-600 hover:text-purple-700 bg-purple-50 px-5 py-3 rounded-lg transition w-full text-center"
                                         >
-                                             Generate Technical Interview Questions
+                                            Generate Technical Interview Questions
                                         </button>
                                     )}
 

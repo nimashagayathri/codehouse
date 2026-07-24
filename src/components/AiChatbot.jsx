@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Send, X } from 'lucide-react';
 
-const GROQ_API_KEY = process.env.REACT_APP_GROQ_API_KEY;
+const GROQ_API_KEY = "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";
 
 function AiChatbot() {
     const [isOpen, setIsOpen] = useState(false);
